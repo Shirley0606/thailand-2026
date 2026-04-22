@@ -159,6 +159,8 @@ html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif
 .wheel-item.selected{color:var(--acc);font-size:24px}
 </style>
 <body>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <div class="sync-dot" id="syncDot">⏳ 連線中</div>
 <div class="app">
   <div class="pages" id="pages">
@@ -312,10 +314,8 @@ html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif
     <div class="ni" id="ni-info" onclick="switchPage('info')"><span class="ni-icon">ℹ️</span><span class="ni-lbl">資訊</span></div>
   </div>
 </div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
+<script>
+document.addEventListener('DOMContentLoaded',function(){
 const firebaseConfig = {
   apiKey:"AIzaSyAMCpS9GNvd4Dudw3lq5m0xbzMrItgiiQ4",
   authDomain:"travelplan-28643.firebaseapp.com",
@@ -325,12 +325,12 @@ const firebaseConfig = {
   messagingSenderId:"154178170425",
   appId:"1:154178170425:web:1c7c2e2a7e3884b99f67e8"
 };
-const fbApp = initializeApp(firebaseConfig);
-const db = getDatabase(fbApp);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 const syncDot = document.getElementById('syncDot');
 function setSyncStatus(s){syncDot.className='sync-dot '+s;syncDot.textContent=s==='online'?'● 已同步':s==='saving'?'↑ 儲存中':'⏳ 連線中';}
 let saveTimer=null;
-function saveToFB(){setSyncStatus('saving');clearTimeout(saveTimer);saveTimer=setTimeout(()=>{set(ref(db,'app2026'),{itinerary:DAYS,expenses:EXPENSES,checklist:CL_STATE}).then(()=>setSyncStatus('online'));},800);}
+function saveToFB(){setSyncStatus('saving');clearTimeout(saveTimer);saveTimer=setTimeout(()=>{db.ref('app2026').set({itinerary:DAYS,expenses:EXPENSES,checklist:CL_STATE}).then(()=>setSyncStatus('online'));},800);}
 
 const TYPE_ICON={航班:'✈️',集合:'📣',交通:'🚌',飯店:'🏨',住宿:'🛏️',景點:'🗺️',用餐:'🍜',其他:'📌',購物:'🛍️',活動:'🎡'};
 const DAY_HINTS=[
@@ -435,7 +435,7 @@ let CL_STATE={},CL_COLL={},activeFam=0;
 function initCL(){FAMS_CL.forEach(f=>{CL_STATE[f.id]={};CATS_CL.forEach(c=>{const d=(DEF_ITEMS[f.id]||{})[c.id]||[];CL_STATE[f.id][c.id]=d.map(t=>({text:t,on:false}));});});}
 initCL();
 
-onValue(ref(db,'app2026'),snap=>{
+db.ref('app2026').on('value',snap=>{
   const data=snap.val();
   if(data){
     if(data.itinerary&&Array.isArray(data.itinerary)&&data.itinerary.length===DAYS.length){data.itinerary.forEach((d,i)=>{if(d.meetingTime)DAYS[i].meetingTime=d.meetingTime;if(d.meetingLocation)DAYS[i].meetingLocation=d.meetingLocation;if(d.hints)DAYS[i].hints=d.hints;if(d.todos)DAYS[i].todos=d.todos;if(d.items)DAYS[i].items=d.items;});}else if(!data.itinerary){saveToFB();}
@@ -886,6 +886,7 @@ window.switchAccTab=function(t){
   _origSwitchAccTab(t);
   if(t==='personal'){renderPersonal();}
 };
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
