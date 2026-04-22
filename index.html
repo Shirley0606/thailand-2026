@@ -6,443 +6,1215 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="泰國2026">
-<meta name="theme-color" content="#12151A">
-<link rel="stylesheet" href="css/style.css">
+<meta name="theme-color" content="#0d0f14">
 <title>🇹🇭 泰國 2026</title>
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --bg: #0d0f14; --bg2: #141720; --bgc: #1a1e2a; --bgi: #0f1219;
+    --bd: #2a2f3e; --bdl: #333a4d; --acc: #4f8ef7; --accd: rgba(79,142,247,0.15);
+    --gold: #f5c842; --grn: #4caf82; --red: #e05252; --t1: #e8ecf5; --t2: #8891a8; --tm: #5a6278;
+  }
+  body { background: var(--bg); color: var(--t1); font-family: 'Noto Sans TC', sans-serif; }
+  .app { max-width: 390px; margin: 0 auto; min-height: 100vh; background: var(--bg); display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .pages { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 70px; }
+  .pages::-webkit-scrollbar { display: none; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* NAV */
+  .nav { position: sticky; bottom: 0; background: var(--bg2); border-top: 1px solid var(--bd); display: flex; justify-content: space-around; padding: 10px 0 14px; z-index: 100; }
+  .ni { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; flex: 1; padding: 2px 0; }
+  .ni-icon { font-size: 22px; line-height: 1; }
+  .ni-lbl { font-size: 10px; color: var(--tm); transition: color .2s; }
+  .ni.active .ni-lbl { color: var(--acc); }
+  .ni-dot { width: 4px; height: 4px; background: var(--acc); border-radius: 50%; margin-top: 1px; }
+
+  /* HOME */
+  .hdr { background: var(--bg2); border-bottom: 1px solid var(--bd); padding: 16px 20px; position: sticky; top: 0; z-index: 10; }
+  .hdr-sub { font-size: 11px; font-weight: 600; color: var(--tm); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .hdr-title { font-size: 22px; font-weight: 700; color: var(--t1); }
+  .hero { background: var(--bg2); border: 1px solid var(--bd); border-radius: 16px; padding: 20px; margin: 16px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--acc)); }
+  .cd-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .cd-box { flex: 1; background: var(--bgi); border-radius: 10px; padding: 10px 6px; text-align: center; border: 1px solid var(--bd); }
+  .cd-num { font-family: 'DM Mono', monospace; font-size: 26px; font-weight: 500; color: var(--acc); line-height: 1; }
+  .cd-lbl { font-size: 10px; color: var(--tm); margin-top: 4px; }
+  .hero-sub { font-size: 13px; color: var(--t2); }
+  .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 16px 16px; }
+  .qbtn { background: var(--bgc); border: 1px solid var(--bd); border-radius: 14px; padding: 12px 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: all .15s; }
+  .qbtn:active { background: var(--bg2); }
+  .qbtn-icon { font-size: 22px; }
+  .qbtn-lbl { font-size: 11px; color: var(--t2); text-align: center; }
+  .sec-title { font-size: 11px; font-weight: 600; color: var(--tm); letter-spacing: .1em; text-transform: uppercase; padding: 0 16px; margin-bottom: 10px; }
+  .section { margin: 0 0 16px; padding: 0 16px; }
+  .wx-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 16px 16px; }
+  .wx-card { background: var(--bgc); border: 1px solid var(--bd); border-radius: 14px; padding: 14px; }
+  .wx-icon { font-size: 26px; text-align: right; margin-bottom: 6px; }
+  .wx-city { font-size: 11px; color: var(--tm); margin-bottom: 4px; }
+  .wx-temp { font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 500; color: var(--t1); line-height: 1; }
+  .wx-desc { font-size: 11px; color: var(--t2); margin-top: 4px; }
+  .fx-card { background: var(--bgc); border: 1px solid var(--bd); border-radius: 14px; overflow: hidden; margin: 0 16px 16px; }
+  .fx-hdr { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 10px; }
+  .fx-title { font-size: 14px; font-weight: 600; color: var(--t1); }
+  .fx-inp-row { display: flex; align-items: center; gap: 10px; padding: 0 16px 12px; }
+  .fx-wrap { flex: 1; background: var(--bgi); border-radius: 10px; border: 1px solid var(--bd); display: flex; align-items: center; padding: 8px 12px; gap: 6px; }
+  .fx-sym { font-size: 14px; color: var(--tm); }
+  .fx-inp { background: none; border: none; outline: none; color: var(--t1); font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; width: 100%; }
+  .fx-div { height: 1px; background: var(--bd); margin: 0 16px; }
+  .fx-results { padding: 10px 16px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .fx-row { display: flex; justify-content: space-between; align-items: center; }
+  .fx-from { font-size: 13px; color: var(--t2); }
+  .fx-to { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; color: var(--t1); }
+  .fx-rate { font-size: 10px; color: var(--grn); }
+  .link-btn { border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; margin: 0 16px 10px; }
+  .link-btn.blue { background: rgba(79,142,247,.08); border: 1px solid rgba(79,142,247,.2); }
+  .link-btn.red { background: rgba(224,82,82,.06); border: 1px solid rgba(224,82,82,.2); }
+  .link-ic { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .link-t { font-size: 13px; font-weight: 600; }
+  .link-s { font-size: 11px; color: var(--t2); margin-top: 2px; }
+
+  /* ITINERARY */
+  .it-hdr { background: var(--bg2); border-bottom: 1px solid var(--bd); padding: 16px 20px 0; position: sticky; top: 0; z-index: 10; }
+  .dtabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--bd); }
+  .dtabs::-webkit-scrollbar { display: none; }
+  .dtab { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding: 8px 14px 12px; cursor: pointer; border-bottom: 2px solid transparent; min-width: 60px; border-radius: 8px 8px 0 0; }
+  .dtab.active { color: var(--acc); border-bottom-color: var(--acc); background: var(--accd); }
+  .dtab-d { font-size: 16px; font-weight: 700; color: var(--tm); }
+  .dtab.active .dtab-d { color: var(--acc); }
+  .dtab-w { font-size: 11px; color: var(--tm); margin-top: 1px; }
+  .it-main { padding: 16px 16px 100px; }
+  .meet-banner { background: var(--bg2); border: 1px solid var(--bdl); border-radius: 14px; padding: 20px; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .meet-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--acc)); }
+  .meet-lbl { font-size: 11px; font-weight: 600; color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .meet-time { font-family: 'DM Mono', monospace; font-size: 56px; font-weight: 500; color: var(--gold); line-height: 1; margin-bottom: 8px; text-shadow: 0 0 40px rgba(245,200,66,.25); }
+  .meet-place { font-size: 14px; color: var(--t2); }
+  .it-sec-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .it-sec-lbl { font-size: 11px; font-weight: 600; color: var(--tm); letter-spacing: .1em; text-transform: uppercase; }
+  .add-btn { background: var(--acc); color: #fff; border: none; border-radius: 8px; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; font-weight: 600; padding: 8px 16px; cursor: pointer; }
+  .it-list { display: flex; flex-direction: column; gap: 10px; }
+  .it-card { background: var(--bgc); border: 1px solid var(--bd); border-radius: 14px; display: flex; align-items: stretch; overflow: hidden; min-height: 90px; }
+  .it-handle { width: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--tm); background: rgba(255,255,255,.02); border-right: 1px solid var(--bd); font-size: 14px; }
+  .it-time-col { width: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--bd); }
+  .it-time { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; color: var(--acc); text-align: center; }
+  .it-body { flex: 1; padding: 12px; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-width: 0; }
+  .it-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 4px; }
+  .it-title { font-size: 14px; font-weight: 600; color: var(--t1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .it-note { font-size: 12px; color: var(--t2); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.5; }
+  .it-actions { display: flex; flex-direction: column; gap: 4px; padding: 8px; justify-content: center; flex-shrink: 0; }
+  .it-btn { width: 28px; height: 28px; border: 1px solid var(--bd); border-radius: 8px; background: rgba(255,255,255,.03); color: var(--t2); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .it-btn.del:hover { border-color: var(--red); color: var(--red); }
+  .it-btn.edit:hover { border-color: var(--acc); color: var(--acc); }
+
+  /* ACCOUNTING */
+  .acc-hdr { background: var(--bg2); border-bottom: 1px solid var(--bd); padding: 16px 20px; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: flex-end; }
+  .new-btn { background: var(--grn); color: #0d0f14; border: none; border-radius: 8px; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; font-weight: 700; padding: 8px 16px; cursor: pointer; }
+  .sub-tabs { display: flex; margin: 12px 16px; background: var(--bgc); border-radius: 10px; padding: 3px; gap: 3px; border: 1px solid var(--bd); }
+  .stab { flex: 1; text-align: center; padding: 7px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--tm); cursor: pointer; transition: all .2s; }
+  .stab.active { background: var(--bg2); color: var(--t1); }
+  .sum-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 16px 16px; }
+  .sum-c { background: var(--bgc); border-radius: 10px; padding: 12px; border: 1px solid var(--bd); text-align: center; }
+  .sum-l { font-size: 10px; color: var(--tm); margin-bottom: 5px; }
+  .sum-v { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: var(--t1); }
+  .sum-s { font-size: 10px; color: var(--tm); margin-top: 2px; }
+  .exp-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .exp-c { background: var(--bgc); border-radius: 14px; padding: 14px; border: 1px solid var(--bd); }
+  .exp-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .exp-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: 6px; display: inline-block; }
+  .exp-ttl { font-size: 15px; font-weight: 600; color: var(--t1); }
+  .exp-nt { font-size: 12px; color: var(--t2); margin-top: 3px; }
+  .exp-amt { font-family: 'DM Mono', monospace; font-size: 19px; font-weight: 500; color: var(--grn); white-space: nowrap; }
+  .exp-twd { font-size: 11px; color: var(--acc); margin-top: 2px; text-align: right; }
+  .exp-bot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--bd); }
+  .exp-pay { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--t2); }
+  .av { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .exp-sp { font-size: 11px; padding: 3px 8px; border-radius: 20px; background: var(--bgi); color: var(--t2); border: 1px solid var(--bd); }
+  .exp-acts { display: flex; gap: 6px; margin-top: 8px; }
+  .exp-ab { flex: 1; padding: 7px; border-radius: 8px; border: 1px solid var(--bd); background: var(--bgi); font-size: 12px; color: var(--t2); text-align: center; cursor: pointer; }
+  .exp-ab.v { color: var(--grn); border-color: rgba(76,175,130,.3); }
+  .exp-ab.vd { color: var(--tm); }
+  .sec-hdr { display: flex; justify-content: space-between; align-items: center; padding: 0 18px 8px; }
+  .sec-lbl { font-size: 11px; font-weight: 600; color: var(--tm); letter-spacing: .08em; text-transform: uppercase; }
+
+  /* CHECKLIST */
+  .cl-hdr { background: var(--bg2); border-bottom: 1px solid var(--bd); padding: 16px 20px; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: flex-end; }
+  .reset-btn { font-size: 12px; color: var(--t2); background: var(--bgc); padding: 5px 10px; border-radius: 8px; border: 1px solid var(--bd); cursor: pointer; }
+  .fam-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 12px 16px; scrollbar-width: none; }
+  .fam-tabs::-webkit-scrollbar { display: none; }
+  .ftab { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+  .ftab-av { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; border: 2px solid transparent; transition: all .2s; }
+  .ftab-av.sel { border-color: var(--gold) !important; }
+  .ftab-n { font-size: 10px; color: var(--t2); }
+  .ftab-n.sel { color: var(--gold); }
+  .cl-prog { margin: 0 16px 14px; background: var(--bgc); border-radius: 14px; padding: 14px 16px; border: 1px solid var(--bd); }
+  .cl-pt { display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .cl-pn { font-size: 15px; font-weight: 700; color: var(--t1); }
+  .cl-pc { font-size: 13px; color: var(--t2); }
+  .cl-track { height: 8px; background: var(--bgi); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+  .cl-fill { height: 8px; border-radius: 4px; background: var(--grn); transition: width .3s; }
+  .cl-pct { font-size: 12px; color: var(--grn); text-align: right; }
+  .cat-sec { margin: 0 16px 10px; }
+  .cat-hdr { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bgc); border-radius: 12px 12px 0 0; border: 1px solid var(--bd); border-bottom: none; cursor: pointer; }
+  .cat-hdr.coll { border-radius: 12px; }
+  .cat-hl { display: flex; align-items: center; gap: 8px; }
+  .cat-nm { font-size: 14px; font-weight: 600; color: var(--t1); }
+  .cat-bdg { font-size: 10px; padding: 2px 7px; border-radius: 20px; background: var(--bgi); color: var(--tm); border: 1px solid var(--bd); }
+  .cat-bdg.done { color: var(--grn); border-color: rgba(76,175,130,.3); }
+  .cat-chev { font-size: 12px; color: var(--tm); transition: transform .2s; }
+  .cat-chev.open { transform: rotate(180deg); }
+  .cat-body { background: var(--bgc); border-radius: 0 0 12px 12px; border: 1px solid var(--bd); border-top: 1px solid var(--bd); overflow: hidden; }
+  .cl-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--bd); }
+  .cl-item:last-child { border-bottom: none; }
+  .cl-chk { width: 22px; height: 22px; border-radius: 7px; border: 1.5px solid var(--bd); flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .cl-chk.on { background: var(--grn); border-color: var(--grn); }
+  .cl-txt { flex: 1; font-size: 14px; color: var(--t1); }
+  .cl-txt.done { color: var(--tm); text-decoration: line-through; }
+  .cl-add-row { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--bd); }
+  .cl-inp { flex: 1; background: var(--bgi); border: 1px solid var(--bd); border-radius: 8px; padding: 7px 10px; font-size: 13px; color: var(--t1); outline: none; font-family: inherit; }
+  .cl-add-btn { font-size: 12px; background: var(--grn); color: #0d0f14; border: none; border-radius: 8px; padding: 7px 12px; cursor: pointer; font-weight: 700; }
+
+  /* INFO */
+  .emer-card { margin: 0 16px 12px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(224,82,82,.3); }
+  .emer-hdr { background: rgba(224,82,82,.08); padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+  .emer-ht { font-size: 14px; font-weight: 700; color: var(--red); }
+  .emer-it { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(224,82,82,.04); border-top: 1px solid rgba(224,82,82,.15); cursor: pointer; }
+  .emer-il { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--t1); }
+  .emer-num { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--red); }
+  .call-bdg { font-size: 10px; background: rgba(224,82,82,.15); color: var(--red); padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(224,82,82,.3); }
+  .fl-card { margin: 0 16px 10px; background: var(--bgc); border-radius: 14px; padding: 16px; border: 1px solid var(--bd); }
+  .fl-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .fl-dir { font-size: 11px; color: var(--tm); letter-spacing: .05em; text-transform: uppercase; }
+  .fl-num { font-size: 12px; background: rgba(79,142,247,.15); color: var(--acc); padding: 3px 9px; border-radius: 20px; }
+  .fl-route { display: flex; align-items: center; margin-bottom: 10px; }
+  .fl-city { flex: 1; }
+  .fl-city.r { text-align: right; }
+  .fl-code { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; color: var(--t1); }
+  .fl-cname { font-size: 11px; color: var(--tm); margin-top: 2px; }
+  .fl-mid { display: flex; flex-direction: column; align-items: center; flex: 1.2; }
+  .fl-line { display: flex; align-items: center; gap: 4px; width: 100%; }
+  .fl-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--acc); flex-shrink: 0; }
+  .fl-dash { flex: 1; height: 1px; background: var(--bd); }
+  .fl-dur { font-size: 10px; color: var(--tm); margin-top: 3px; }
+  .fl-times { display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .fl-t { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; color: var(--t1); }
+  .fl-d { font-size: 11px; color: var(--tm); margin-top: 2px; }
+  .fl-note { margin-top: 8px; font-size: 11px; color: var(--gold); background: rgba(245,200,66,.08); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(245,200,66,.2); }
+  .tz-card { margin: 0 16px 12px; background: var(--bgc); border-radius: 14px; padding: 16px; border: 1px solid var(--bd); }
+  .tz-row { display: flex; justify-content: space-between; align-items: center; }
+  .tz-bl { text-align: center; flex: 1; }
+  .tz-co { font-size: 11px; color: var(--tm); margin-bottom: 4px; }
+  .tz-t { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; color: var(--t1); }
+  .tz-z { font-size: 11px; color: var(--tm); margin-top: 2px; }
+  .tz-diff { font-size: 11px; color: var(--grn); background: rgba(76,175,130,.1); padding: 3px 8px; border-radius: 20px; }
+  .info-card { margin: 0 16px 10px; background: var(--bgc); border-radius: 14px; border: 1px solid var(--bd); overflow: hidden; }
+  .info-ch { padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .info-ct { display: flex; align-items: center; gap: 10px; }
+  .info-ci { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .info-ctxt { font-size: 14px; font-weight: 600; color: var(--t1); }
+  .info-cs { font-size: 11px; color: var(--tm); margin-top: 2px; }
+  .info-body { padding: 0 16px 14px; border-top: 1px solid var(--bd); }
+  .info-row { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--bd); }
+  .info-row:last-child { border-bottom: none; }
+  .info-ri { font-size: 15px; flex-shrink: 0; }
+  .info-rtt { font-size: 13px; font-weight: 600; color: var(--t1); }
+  .info-rd { font-size: 12px; color: var(--t2); margin-top: 3px; line-height: 1.5; }
+  .tg-imp { background: rgba(224,82,82,.12); color: var(--red); border: 1px solid rgba(224,82,82,.25); font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 600; margin-top: 4px; display: inline-block; }
+  .tg-free { background: rgba(76,175,130,.12); color: var(--grn); border: 1px solid rgba(76,175,130,.25); font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 600; margin-top: 4px; display: inline-block; }
+  .tg-tip { background: rgba(79,142,247,.12); color: var(--acc); border: 1px solid rgba(79,142,247,.2); font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 600; margin-top: 4px; display: inline-block; }
+  .area-tabs { display: flex; margin: 0 16px 12px; background: var(--bgc); border-radius: 10px; padding: 3px; gap: 3px; border: 1px solid var(--bd); }
+  .atab { flex: 1; text-align: center; padding: 8px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--tm); cursor: pointer; transition: all .2s; }
+  .atab.active { background: var(--bg2); color: var(--t1); }
+
+</style>
 </head>
 <body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef } = React;
 
-<div id="loading"><div class="loading-flag">🇹🇭</div><div class="loading-text">載入中...</div></div>
+const DAYS = [
+  {date:'5/16',wd:'六',mt:'06:30',mp:'桃園機場第＿航廈出境大廳',items:[
+    {id:'a1',time:'06:30',type:'集合',title:'桃園機場集合',note:'辦理報到、行李托運'},
+    {id:'a2',time:'09:00',type:'航班',title:'✈ JX741 台北起飛',note:'星宇航空 · 台北 → 曼谷'},
+    {id:'a3',time:'12:00',type:'交通',title:'抵達素萬那普機場',note:'辦理入境、提取行李，出示 TDAC QR Code'},
+    {id:'a4',time:'14:30',type:'飯店',title:'飯店 Check in',note:'Avani Sukhumvit Bangkok'},
+    {id:'a5',time:'16:00',type:'購物',title:'Terminal 21 逛街',note:''},
+    {id:'a6',time:'18:00',type:'用餐',title:'晚餐',note:''},
+  ]},
+  {date:'5/17',wd:'日',mt:'09:00',mp:'飯店大廳',items:[
+    {id:'b1',time:'09:00',type:'交通',title:'出發洽圖洽假日市集',note:'車程約1小時'},
+    {id:'b2',time:'10:00',type:'購物',title:'洽圖洽市集自由逛街',note:''},
+    {id:'b3',time:'11:30',type:'用餐',title:'MIXT CHATUCHAK',note:'美食街吹冷氣'},
+    {id:'b4',time:'16:00',type:'購物',title:'Big C 採買或按摩',note:''},
+    {id:'b5',time:'19:00',type:'其他',title:'房間聚會',note:'⚠️ 隔天早起，今晚早點睡！'},
+  ]},
+  {date:'5/18',wd:'一',mt:'06:20',mp:'飯店大廳（最硬的一天！）',items:[
+    {id:'c1',time:'06:30',type:'交通',title:'出發前往大城',note:'泰玩客包車 · 車程約2小時'},
+    {id:'c2',time:'09:00',type:'景點',title:'長頸鹿吉普車拍照',note:'趁還沒汗流浹背快拍！'},
+    {id:'c3',time:'13:00',type:'用餐',title:'博藍咖啡廳午餐',note:'自費'},
+    {id:'c4',time:'14:30',type:'景點',title:'瑪哈泰寺',note:'約1小時'},
+    {id:'c5',time:'16:30',type:'活動',title:'長尾船與大象互動',note:'看大象洗澡＋餵大象'},
+    {id:'c6',time:'18:30',type:'用餐',title:'犒德夜市',note:'約1.5小時'},
+  ]},
+  {date:'5/19',wd:'二',mt:'09:00',mp:'飯店大廳',items:[
+    {id:'d1',time:'09:00',type:'交通',title:'出發班佩碼頭',note:'車程約2–2.5小時'},
+    {id:'d2',time:'11:30',type:'交通',title:'搭快艇前往沙美島',note:'船程約15分鐘'},
+    {id:'d3',time:'15:00',type:'飯店',title:'Tonsak Resort Check in',note:'開始進入渡假模式 🏖'},
+  ]},
+  {date:'5/20',wd:'三',mt:'—',mp:'睡到自然醒',items:[
+    {id:'e1',time:'08:30',type:'用餐',title:'早餐',note:''},
+    {id:'e2',time:'10:00',type:'活動',title:'A路線：全日放空 🏖',note:'海灘躺平'},
+    {id:'e3',time:'10:00',type:'活動',title:'B路線：半日水上活動',note:'當地自行報名'},
+    {id:'e4',time:'18:30',type:'用餐',title:'渡假村晚餐＋看表演',note:''},
+  ]},
+  {date:'5/21',wd:'四',mt:'11:00',mp:'渡假村飯店大廳',items:[
+    {id:'f1',time:'11:00',type:'交通',title:'搭船離島',note:'船程約15分鐘'},
+    {id:'f2',time:'13:30',type:'購物',title:'ICON SIAM 逛街',note:''},
+    {id:'f3',time:'21:00',type:'飯店',title:'Centrel Point Chidlom Check in',note:''},
+  ]},
+  {date:'5/22',wd:'五',mt:'09:40',mp:'飯店大廳',items:[
+    {id:'g1',time:'10:00',type:'購物',title:'Central World 購物',note:''},
+    {id:'g2',time:'13:10',type:'航班',title:'✈ JX742 辰一家返台',note:'泰辰、Nini 掰掰～'},
+    {id:'g3',time:'15:00',type:'景點',title:'侏羅紀公園沉浸式體驗展',note:''},
+    {id:'g4',time:'16:30',type:'用餐',title:'碼頭夜市晚餐',note:''},
+  ]},
+  {date:'5/23',wd:'六',mt:'—',mp:'自由活動',items:[
+    {id:'h1',time:'09:00',type:'其他',title:'自由活動',note:'最後購物機會！'},
+    {id:'h2',time:'14:00',type:'飯店',title:'回飯店整理行李',note:'明天一早出發'},
+  ]},
+  {date:'5/24',wd:'日',mt:'—',mp:'待確認',items:[
+    {id:'i1',time:'—',type:'交通',title:'前往素萬那普機場',note:'需出示 TDAC QR Code'},
+    {id:'i2',time:'13:10',type:'航班',title:'✈ JX742 曼谷起飛',note:'星宇航空 · 曼谷 → 台北'},
+    {id:'i3',time:'18:00',type:'航班',title:'抵達桃園機場',note:'旅程結束！🎉'},
+  ]},
+];
 
-<div id="app">
-<div id="page-container">
-
-<!-- ══ HOME ══ -->
-<div class="page active" id="page-home">
-  <div class="status-bar"><span id="cur-time">9:41</span><span>🇹🇭 2026 泰國旅遊</span></div>
-  <div class="hero">
-    <div class="hero-label">2026 泰國旅遊</div>
-    <div class="hero-title">出發倒數</div>
-    <div class="hero-sub">2026年5月16日（六）· JX741 09:00</div>
-    <div class="countdown-row">
-      <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-label">天</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-label">時</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-m">--</div><div class="cd-label">分</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-label">秒</div></div>
-    </div>
-  </div>
-  <div class="quick-grid">
-    <div class="quick-item" onclick="switchPage('itinerary')"><span class="quick-icon">🗓️</span><span class="quick-text">行程</span></div>
-    <div class="quick-item" onclick="switchPage('accounting')"><span class="quick-icon">💰</span><span class="quick-text">記帳</span></div>
-    <div class="quick-item" onclick="switchPage('checklist')"><span class="quick-icon">🧳</span><span class="quick-text">清單</span></div>
-    <div class="quick-item" onclick="switchPage('info')"><span class="quick-icon">ℹ️</span><span class="quick-text">資訊</span></div>
-  </div>
-  <div class="sec-title">即時天氣</div>
-  <div class="weather-row">
-    <div class="weather-card">
-      <div class="w-icon" id="bkk-icon">☀️</div>
-      <div class="w-city">曼谷 Bangkok</div>
-      <div class="w-temp" id="bkk-temp">--°</div>
-      <div class="w-desc" id="bkk-desc">載入中...</div>
-      <div class="w-pills"><span class="w-pill" id="bkk-hum">濕度 --%</span><span class="w-pill" id="bkk-uv">UV --</span></div>
-    </div>
-    <div class="weather-card">
-      <div class="w-icon" id="samet-icon">⛅</div>
-      <div class="w-city">沙美島 Koh Samet</div>
-      <div class="w-temp" id="samet-temp">--°</div>
-      <div class="w-desc" id="samet-desc">載入中...</div>
-      <div class="w-pills"><span class="w-pill" id="samet-hum">濕度 --%</span><span class="w-pill">浪高 1m</span></div>
-    </div>
-  </div>
-  <div class="sec-title" style="margin-top:16px">匯率換算</div>
-  <div class="fx-card">
-    <div class="fx-header"><span class="fx-title">快速換算</span><span class="fx-edit" onclick="showFxEdit()">自訂匯率</span></div>
-    <div class="fx-input-row">
-      <div class="fx-wrap"><span class="fx-cur">฿</span><input class="fx-amt" type="number" value="1000" id="thb-input" inputmode="decimal"/></div>
-      <span style="font-size:13px;color:#8B949E">泰銖</span>
-    </div>
-    <div class="fx-div"></div>
-    <div class="fx-results">
-      <div class="fx-row"><span class="fx-from">🇹🇼 台幣 TWD</span><div style="text-align:right"><div class="fx-to" id="twd-v">NT$ 895</div><div class="fx-rate" id="twd-r">1 ฿ = 0.895 NT$</div></div></div>
-      <div class="fx-row"><span class="fx-from">🇺🇸 美金 USD</span><div style="text-align:right"><div class="fx-to" id="usd-v">$ 27.80</div><div class="fx-rate" id="usd-r">1 ฿ = 0.0278 $</div></div></div>
-      <div class="fx-row"><span class="fx-from">🇯🇵 日圓 JPY</span><div style="text-align:right"><div class="fx-to" id="jpy-v">¥ 4,190</div><div class="fx-rate" id="jpy-r">1 ฿ = 4.19 ¥</div></div></div>
-      <div class="fx-row"><span class="fx-from">🇰🇷 韓圜 KRW</span><div style="text-align:right"><div class="fx-to" id="krw-v">₩ 37,200</div><div class="fx-rate" id="krw-r">1 ฿ = 37.2 ₩</div></div></div>
-    </div>
-  </div>
-  <!-- FX Edit Modal -->
-  <div id="fx-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end;justify-content:center">
-    <div style="width:100%;max-width:430px;background:#1C2030;border-radius:20px 20px 0 0;padding:20px;border-top:0.5px solid #2A3040">
-      <div style="width:36px;height:4px;background:#30363D;border-radius:2px;margin:0 auto 16px"></div>
-      <div style="font-size:16px;font-weight:600;color:#F0F6FC;margin-bottom:16px">自訂匯率</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        ${[['twd','🇹🇼 台幣 (TWD)','0.895'],['usd','🇺🇸 美金 (USD)','0.0278'],['jpy','🇯🇵 日圓 (JPY)','4.19'],['krw','🇰🇷 韓圜 (KRW)','37.2']].map(([k,l,v])=>
-          `<div style="display:flex;align-items:center;justify-content:space-between">
-            <span style="font-size:13px;color:#8B949E">${l}</span>
-            <input id="rate-${k}" type="number" value="${v}" style="width:100px;background:#0D1117;border:0.5px solid #30363D;border-radius:8px;padding:6px 10px;font-size:14px;color:#F0F6FC;outline:none;text-align:right"/>
-          </div>`
-        ).join('')}
-      </div>
-      <div style="display:flex;gap:8px;margin-top:16px">
-        <div onclick="closeFxEdit()" style="flex:1;padding:12px;border-radius:10px;border:0.5px solid #30363D;background:#0D1117;font-size:14px;color:#8B949E;text-align:center;cursor:pointer">取消</div>
-        <button onclick="saveFxRates()" style="flex:1;padding:12px;border-radius:10px;background:#58A6FF;font-size:14px;font-weight:600;color:#12151A;cursor:pointer;border:none">儲存</button>
-      </div>
-    </div>
-  </div>
-  <div class="sec-title" style="margin-top:16px">打包清單</div>
-  <div class="h-todo-card">
-    <div class="h-todo-header"><span class="h-todo-title">行前準備（共用）</span><span class="h-todo-badge" id="h-badge">0 / 0</span></div>
-    <div class="prog-track"><div class="prog-fill" id="h-prog" style="width:0%"></div></div>
-    <div id="h-todos"></div>
-    <div style="text-align:center;padding:8px 0 2px"><span style="font-size:12px;color:#58A6FF;cursor:pointer" onclick="switchPage('checklist')">查看完整清單 ›</span></div>
-  </div>
-  <div style="height:12px"></div>
-  <div class="tdac-btn" onclick="window.open('https://tdac.immigration.go.th','_blank')">
-    <div class="tdac-l"><div class="tdac-ic">🛂</div><div><div class="tdac-t">TDAC 電子入境卡申請</div><div class="tdac-s">出發前72小時內完成 · 免費</div></div></div>
-    <span style="font-size:16px;color:#3A6A99">›</span>
-  </div>
-  <div style="height:10px"></div>
-  <div class="emer-btn" onclick="switchPage('info')">
-    <div class="emer-ic">🚨</div>
-    <div><div class="emer-t">緊急電話快速撥打</div><div class="emer-s">觀光警察 1155 · 救護車 1669 · 駐泰辦事處</div></div>
-  </div>
-  <div style="height:16px"></div>
-</div>
-
-<!-- ══ ITINERARY ══ -->
-<div class="page" id="page-itinerary">
-  <div class="status-bar"><span id="it-time">9:41</span><span>🇹🇭 2026 泰國旅遊</span></div>
-  <div class="it-sub">✈ 旅行行程表</div>
-  <div class="it-title">泰國 2026 旅行計畫</div>
-  <div class="dtabs-wrap"><div class="dtabs" id="dayTabs"></div></div>
-  <div id="dayContent"></div>
-</div>
-
-<!-- ══ ACCOUNTING ══ -->
-<div class="page" id="page-accounting">
-  <div class="status-bar"><span>9:41</span><span>🇹🇭 2026 泰國旅遊</span></div>
-  <div class="page-header"><span class="page-title">記帳</span><span class="acc-new-btn" onclick="openModal()">＋ 新增</span></div>
-  <div class="tab-sw">
-    <div class="tsw active" id="acc-tab-g" onclick="switchAccTab('group')">團體分帳</div>
-    <div class="tsw" id="acc-tab-p" onclick="switchAccTab('personal')">個人帳目</div>
-  </div>
-  <div id="acc-group">
-    <div class="sum-row">
-      <div class="sum-c"><div class="sum-l">總花費</div><div class="sum-v" id="acc-total" style="font-size:14px">฿ 0</div><div class="sum-s" id="acc-total-twd">NT$ 0</div></div>
-      <div class="sum-c"><div class="sum-l">筆數</div><div class="sum-v" id="acc-count">0</div><div class="sum-s">筆費用</div></div>
-      <div class="sum-c"><div class="sum-l">待結算</div><div class="sum-v" id="acc-pending" style="color:#F0A500">0</div><div class="sum-s">筆未核銷</div></div>
-    </div>
-    <div class="acc-sh"><span class="acc-sl">費用記錄</span><span class="acc-sa" onclick="verifyAll()">一鍵全部核銷</span></div>
-    <div class="exp-list" id="expList"></div>
-    <div class="acc-sh"><span class="acc-sl">結算清單</span><span class="acc-sa">查看歷史</span></div>
-    <div class="set-list" id="setList"></div>
-  </div>
-  <div id="acc-personal" class="hidden">
-    <div class="ptab-sw">
-      <div class="pt active" id="pt-ind" onclick="switchPersonalTab('ind')">個人明細</div>
-      <div class="pt" id="pt-fam" onclick="switchPersonalTab('fam')">家庭匯總</div>
-    </div>
-    <div id="p-individual">
-      <div class="mem-scroll"><div class="mem-row" id="memRow"></div></div>
-      <div class="ps-c" id="pSummary"></div>
-      <div class="acc-sh" style="margin-top:4px"><span class="acc-sl">費用明細</span></div>
-      <div class="exp-list" id="pList"></div>
-    </div>
-    <div id="p-family" class="hidden">
-      <div class="fam-list" id="famList"></div>
-    </div>
-  </div>
-  <div class="modal-ov" id="modalOv" onclick="handleOvClick(event)">
-    <div class="modal-sh" id="modalSh"><div id="modalBody"></div></div>
-  </div>
-</div>
-
-<!-- ══ CHECKLIST ══ -->
-<div class="page" id="page-checklist">
-  <div class="status-bar"><span>9:41</span><span>🇹🇭 2026 泰國旅遊</span></div>
-  <div class="page-header"><span class="page-title">打包清單</span><span class="reset-cl-btn" onclick="resetCL()">全部重置</span></div>
-  <div class="ftabs-wrap"><div class="ftabs" id="famTabs"></div></div>
-  <div class="cl-prog">
-    <div class="cl-pt"><span class="cl-pn" id="cl-pname">共用清單</span><span class="cl-pc" id="cl-pcount">0 / 0</span></div>
-    <div class="cl-ptrack"><div class="cl-pfill" id="cl-pfill" style="width:0%"></div></div>
-    <div class="cl-pct" id="cl-ppct">0% 完成</div>
-  </div>
-  <div id="catSecs"></div>
-</div>
-
-<!-- ══ INFO ══ -->
-<div class="page" id="page-info">
-  <div class="status-bar"><span id="inf-time">9:41</span><span>🇹🇭 2026 泰國旅遊</span></div>
-  <div class="page-header"><span class="page-title">旅遊資訊</span></div>
-  <div class="sec-title">緊急聯絡</div>
-  <div class="emer-card">
-    <div class="emer-hdr"><span style="font-size:20px">🚨</span><div><div class="emer-ht">緊急電話</div><div class="emer-hs">點擊號碼直接撥打</div></div></div>
-    <div class="emer-it" onclick="window.location='tel:191'"><div class="emer-il"><span class="emer-ii">🚔</span><span class="emer-in">泰國警察</span></div><div style="display:flex;align-items:center;gap:8px"><span class="emer-num">191</span><span class="call-bdg">撥打</span></div></div>
-    <div class="emer-it" onclick="window.location='tel:1669'"><div class="emer-il"><span class="emer-ii">🚑</span><span class="emer-in">緊急救護</span></div><div style="display:flex;align-items:center;gap:8px"><span class="emer-num">1669</span><span class="call-bdg">撥打</span></div></div>
-    <div class="emer-it" onclick="window.location='tel:1155'"><div class="emer-il"><span class="emer-ii">🏛️</span><span class="emer-in">觀光警察（英語）</span></div><div style="display:flex;align-items:center;gap:8px"><span class="emer-num">1155</span><span class="call-bdg">撥打</span></div></div>
-    <div class="emer-it" onclick="window.location='tel:+6621193555'"><div class="emer-il"><span class="emer-ii">🇹🇼</span><span class="emer-in">駐泰台北辦事處</span></div><div style="display:flex;align-items:center;gap:8px"><span class="emer-num" style="font-size:11px">+66-2-119-3555</span><span class="call-bdg">撥打</span></div></div>
-    <div class="emer-it" onclick="window.location='tel:+80008850885'"><div class="emer-il"><span class="emer-ii">🆘</span><span class="emer-in">外交部急難救助</span></div><div style="display:flex;align-items:center;gap:8px"><span class="emer-num" style="font-size:11px">+800-0885-0885</span><span class="call-bdg">撥打</span></div></div>
-  </div>
-  <div class="sec-title">航班資訊</div>
-  <div class="fl-card">
-    <div class="fl-hdr"><span class="fl-dir">去程</span><span class="fl-num">JX741</span></div>
-    <div class="fl-route"><div class="fl-city"><div class="fl-code">TPE</div><div class="fl-cname">台北桃園</div></div><div class="fl-mid"><div class="fl-line"><div class="fl-dot"></div><div class="fl-dash"></div><span class="fl-plane">✈</span><div class="fl-dash"></div><div class="fl-dot"></div></div><div class="fl-dur">約3小時</div></div><div class="fl-city r"><div class="fl-code">BKK</div><div class="fl-cname">曼谷素萬那普</div></div></div>
-    <div class="fl-times"><div class="fl-tb"><div class="fl-t">09:00</div><div class="fl-d">2026年5月16日（六）</div></div><div class="fl-tb r"><div class="fl-t">12:00</div><div class="fl-d">2026年5月16日（六）</div></div></div>
-    <div class="fl-divider"></div>
-    <div class="fl-ir"><div class="fl-ii"><div class="fl-il">航空公司</div><div class="fl-iv">星宇航空</div></div><div class="fl-ii"><div class="fl-il">集合時間</div><div class="fl-iv">06:30</div></div><div class="fl-ii"><div class="fl-il">集合地點</div><div class="fl-iv">第＿航廈</div></div></div>
-  </div>
-  <div class="fl-card">
-    <div class="fl-hdr"><span class="fl-dir">回程（全員）</span><span class="fl-num">JX742</span></div>
-    <div class="fl-route"><div class="fl-city"><div class="fl-code">BKK</div><div class="fl-cname">曼谷素萬那普</div></div><div class="fl-mid"><div class="fl-line"><div class="fl-dot"></div><div class="fl-dash"></div><span class="fl-plane">✈</span><div class="fl-dash"></div><div class="fl-dot"></div></div><div class="fl-dur">約3小時</div></div><div class="fl-city r"><div class="fl-code">TPE</div><div class="fl-cname">台北桃園</div></div></div>
-    <div class="fl-times"><div class="fl-tb"><div class="fl-t">13:10</div><div class="fl-d">2026年5月24日（日）</div></div><div class="fl-tb r"><div class="fl-t">18:00</div><div class="fl-d">2026年5月24日（日）</div></div></div>
-    <div class="fl-note">⚠️ 辰一家（泰辰、NiNi）於 5/22 提早搭乘同班次返台</div>
-  </div>
-  <div class="sec-title">時差資訊</div>
-  <div class="tz-card">
-    <div class="tz-row">
-      <div class="tz-bl"><div class="tz-co">🇹🇼 台灣</div><div class="tz-t" id="tw-t">09:41</div><div class="tz-z">UTC+8</div></div>
-      <div class="tz-mid"><div style="font-size:18px;color:#484F58">⇄</div><div class="tz-diff">慢 1 小時</div></div>
-      <div class="tz-bl"><div class="tz-co">🇹🇭 泰國</div><div class="tz-t" id="th-t">08:41</div><div class="tz-z">UTC+7</div></div>
-    </div>
-    <div style="margin-top:10px;padding-top:10px;border-top:0.5px solid #21262D;font-size:12px;color:#8B949E">泰國比台灣慢 1 小時，手機入境後會自動切換時區</div>
-  </div>
-  <div class="sec-title">入境資訊</div>
-  <div class="info-card">
-    <div class="info-ch" onclick="toggleInfo('tdac')"><div class="info-ct"><div class="info-ci" style="background:#0D2040">🛂</div><div><div class="info-ctxt">TDAC 電子入境卡</div><div class="info-cs">必辦 · 出發前72小時內完成</div></div></div><span class="info-chev open" id="chev-tdac">▼</span></div>
-    <div class="info-body" id="body-tdac">
-      <div class="info-row"><span class="info-ri">🌐</span><div class="info-rc"><div class="info-rtt">官方網址</div><div class="info-rd">https://tdac.immigration.go.th（免費申請）</div><span class="info-tg tg-imp">必辦</span></div></div>
-      <div class="info-row"><span class="info-ri">⏰</span><div class="info-rc"><div class="info-rtt">申請時間</div><div class="info-rd">出發前 72 小時內，建議 5/13–5/16 早上完成</div></div></div>
-      <div class="info-row"><span class="info-ri">👨‍👩‍👧‍👦</span><div class="info-rc"><div class="info-rtt">每人一份</div><div class="info-rd">包含嬰幼兒，可一人帳號登錄多位旅客</div></div></div>
-      <div class="info-row"><span class="info-ri">📱</span><div class="info-rc"><div class="info-rtt">入境時</div><div class="info-rd">出示 QR Code + 護照給海關掃描，截圖存手機備用</div><span class="info-tg tg-tip">小提醒</span></div></div>
-    </div>
-  </div>
-  <div class="info-card">
-    <div class="info-ch" onclick="toggleInfo('visa')"><div class="info-ct"><div class="info-ci" style="background:#0D2A16">🇹🇭</div><div><div class="info-ctxt">簽證與入境規定</div><div class="info-cs">台灣旅客免簽 60 天</div></div></div><span class="info-chev" id="chev-visa">▼</span></div>
-    <div class="info-body hidden" id="body-visa">
-      <div class="info-row"><span class="info-ri">✅</span><div class="info-rc"><div class="info-rtt">免簽證入境</div><div class="info-rd">台灣護照免簽，每次停留最長 60 天</div><span class="info-tg tg-free">免簽</span></div></div>
-      <div class="info-row"><span class="info-ri">🛂</span><div class="info-rc"><div class="info-rtt">護照效期</div><div class="info-rd">入境時護照效期需在 6 個月以上</div></div></div>
-      <div class="info-row"><span class="info-ri">💰</span><div class="info-rc"><div class="info-rtt">海關申報</div><div class="info-rd">攜帶商品價值 2 萬泰銖內免申報；超過須申報，上限 20 萬泰銖</div></div></div>
-      <div class="info-row"><span class="info-ri">🚭</span><div class="info-rc"><div class="info-rtt">禁止攜帶</div><div class="info-rd">電子菸、加熱菸及零件嚴格禁止，違者最重面臨監禁或鉅額罰款</div><span class="info-tg tg-imp">嚴禁</span></div></div>
-    </div>
-  </div>
-  <div class="sec-title">景點資訊</div>
-  <div class="area-tabs"><div class="atab active" id="atab-bkk" onclick="switchArea('bkk')">🏙️ 曼谷</div><div class="atab" id="atab-samet" onclick="switchArea('samet')">🏝️ 沙美島</div></div>
-  <div id="area-bkk">
-    <div class="info-card"><div class="info-ch" onclick="toggleInfo('bkk-s')"><div class="info-ct"><div class="info-ci" style="background:#1A0A2A">🎡</div><div><div class="info-ctxt">曼谷景點</div><div class="info-cs">寺廟・夜市・市集</div></div></div><span class="info-chev open" id="chev-bkk-s">▼</span></div>
-      <div class="info-body" id="body-bkk-s">
-        <div class="info-row"><span class="info-ri">🕌</span><div class="info-rc"><div class="info-rtt">瑪哈泰寺（大城）</div><div class="info-rd">著名佛頭樹根，建議早上前往避開高溫</div><span class="info-tg tg-tip">Day 3 行程</span></div></div>
-        <div class="info-row"><span class="info-ri">🛍️</span><div class="info-rc"><div class="info-rtt">洽圖洽假日市集</div><div class="info-rd">週末限定，超過 15,000 個攤位</div><span class="info-tg tg-tip">Day 2 行程</span></div></div>
-        <div class="info-row"><span class="info-ri">🏬</span><div class="info-rc"><div class="info-rtt">Terminal 21</div><div class="info-rd">以世界城市為主題的購物中心，每層樓風格不同</div></div></div>
-        <div class="info-row"><span class="info-ri">🛥️</span><div class="info-rc"><div class="info-rtt">ICON SIAM</div><div class="info-rd">河濱高級購物中心，有水上市場，建興酒家在此</div><span class="info-tg tg-tip">Day 6 行程</span></div></div>
-        <div class="info-row"><span class="info-ri">🌙</span><div class="info-rc"><div class="info-rtt">Asiatique 碼頭夜市</div><div class="info-rd">昭披耶河畔夜市，適合購物用餐，有摩天輪</div><span class="info-tg tg-tip">Day 7 行程</span></div></div>
-      </div>
-    </div>
-    <div class="info-card"><div class="info-ch" onclick="toggleInfo('bkk-f')"><div class="info-ct"><div class="info-ci" style="background:#0D2A16">🍜</div><div><div class="info-ctxt">曼谷美食</div><div class="info-cs">必吃推薦</div></div></div><span class="info-chev" id="chev-bkk-f">▼</span></div>
-      <div class="info-body hidden" id="body-bkk-f">
-        <div class="info-row"><span class="info-ri">🍲</span><div class="info-rc"><div class="info-rtt">建興酒家</div><div class="info-rd">百年老字號，必點招牌炒蟹、蝦醬炒飯</div></div></div>
-        <div class="info-row"><span class="info-ri">🍝</span><div class="info-rc"><div class="info-rtt">船麵</div><div class="info-rd">泰國特色麵食，湯頭濃郁，ICON SIAM 地下美食街有多家</div></div></div>
-        <div class="info-row"><span class="info-ri">🥭</span><div class="info-rc"><div class="info-rtt">芒果糯米飯</div><div class="info-rd">泰國國民甜點，新鮮芒果搭配椰漿糯米</div></div></div>
-        <div class="info-row"><span class="info-ri">🧋</span><div class="info-rc"><div class="info-rtt">泰式奶茶</div><div class="info-rd">街頭隨處可見，約 30–60 泰銖</div></div></div>
-      </div>
-    </div>
-    <div class="info-card"><div class="info-ch" onclick="toggleInfo('bkk-t')"><div class="info-ct"><div class="info-ci" style="background:#0A2020">🚌</div><div><div class="info-ctxt">曼谷交通</div><div class="info-cs">BTS・Grab・包車</div></div></div><span class="info-chev" id="chev-bkk-t">▼</span></div>
-      <div class="info-body hidden" id="body-bkk-t">
-        <div class="info-row"><span class="info-ri">🚇</span><div class="info-rc"><div class="info-rtt">BTS 捷運</div><div class="info-rd">市區最方便，單程約 17–59 泰銖，可買兔子卡</div><span class="info-tg tg-tip">推薦</span></div></div>
-        <div class="info-row"><span class="info-ri">📱</span><div class="info-rc"><div class="info-rtt">Grab / Bolt</div><div class="info-rd">叫車 App，透明計費，建議出發前下載好</div></div></div>
-        <div class="info-row"><span class="info-ri">🚗</span><div class="info-rc"><div class="info-rtt">泰玩客包車</div><div class="info-rd">本次大城、沙美島往返及機場接送已安排包車</div></div></div>
-      </div>
-    </div>
-  </div>
-  <div id="area-samet" class="hidden">
-    <div class="info-card"><div class="info-ch" onclick="toggleInfo('samet-s')"><div class="info-ct"><div class="info-ci" style="background:#0A2020">🏖️</div><div><div class="info-ctxt">沙美島景點</div><div class="info-cs">海灘・水上活動</div></div></div><span class="info-chev open" id="chev-samet-s">▼</span></div>
-      <div class="info-body" id="body-samet-s">
-        <div class="info-row"><span class="info-ri">🏄</span><div class="info-rc"><div class="info-rtt">水上活動</div><div class="info-rd">浮潛、香蕉船、獨木舟，約 300–800 泰銖</div><span class="info-tg tg-tip">Day 5 B路線</span></div></div>
-        <div class="info-row"><span class="info-ri">🌅</span><div class="info-rc"><div class="info-rtt">Hat Sai Kaew 白沙灘</div><div class="info-rd">沙美島最美的白沙灘，水清沙白</div></div></div>
-        <div class="info-row"><span class="info-ri">🎭</span><div class="info-rc"><div class="info-rtt">渡假村表演秀</div><div class="info-rd">Tonsak Resort 晚間有表演，住客免費觀賞</div><span class="info-tg tg-free">免費</span></div></div>
-      </div>
-    </div>
-    <div class="info-card"><div class="info-ch" onclick="toggleInfo('samet-t')"><div class="info-ct"><div class="info-ci" style="background:#0D2040">⛵</div><div><div class="info-ctxt">沙美島交通</div><div class="info-cs">碼頭・快艇</div></div></div><span class="info-chev" id="chev-samet-t">▼</span></div>
-      <div class="info-body hidden" id="body-samet-t">
-        <div class="info-row"><span class="info-ri">🚌</span><div class="info-rc"><div class="info-rtt">曼谷→班佩碼頭</div><div class="info-rd">包車約 2–2.5 小時，本次已安排泰玩客包車</div></div></div>
-        <div class="info-row"><span class="info-ri">⛵</span><div class="info-rc"><div class="info-rtt">班佩→沙美島</div><div class="info-rd">快艇船程約 15 分鐘，約 80–100 泰銖</div></div></div>
-        <div class="info-row"><span class="info-ri">🛺</span><div class="info-rc"><div class="info-rtt">島上移動</div><div class="info-rd">皮卡計程車，談好價格再上車</div></div></div>
-      </div>
-    </div>
-    <div class="info-card"><div class="info-ch" onclick="toggleInfo('samet-tip')"><div class="info-ct"><div class="info-ci" style="background:#2A1F00">💡</div><div><div class="info-ctxt">沙美島貼士</div><div class="info-cs">必知注意事項</div></div></div><span class="info-chev" id="chev-samet-tip">▼</span></div>
-      <div class="info-body hidden" id="body-samet-tip">
-        <div class="info-row"><span class="info-ri">💵</span><div class="info-rc"><div class="info-rtt">以現金為主</div><div class="info-rd">島上多數店家只收現金，建議從曼谷帶足夠泰銖</div><span class="info-tg tg-imp">注意</span></div></div>
-        <div class="info-row"><span class="info-ri">📶</span><div class="info-rc"><div class="info-rtt">網路訊號</div><div class="info-rd">訊號較弱，建議使用 eSIM，飯店 WiFi 較穩定</div></div></div>
-        <div class="info-row"><span class="info-ri">🌞</span><div class="info-rc"><div class="info-rtt">防曬必備</div><div class="info-rd">海灘日曬強烈，每 2 小時補擦，小孩要特別注意</div></div></div>
-        <div class="info-row"><span class="info-ri">🦟</span><div class="info-rc"><div class="info-rtt">防蚊</div><div class="info-rd">傍晚蚊蟲較多，帶防蚊液，尤其小孩要塗抹</div></div></div>
-      </div>
-    </div>
-  </div>
-  <div style="height:16px"></div>
-</div>
-
-</div><!-- end page-container -->
-
-<!-- 行程新增/編輯 Modal -->
-<div class="it-modal-ov" id="itModalOv" onclick="handleItOv(event)">
-  <div class="it-modal-sh"><div id="itModalBody"></div></div>
-</div>
-
-<div id="bottom-nav">
-  <div class="nav-item active" id="nav-home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">首頁</span><div class="nav-dot"></div></div>
-  <div class="nav-item" id="nav-itinerary" onclick="switchPage('itinerary')"><span class="nav-icon">🗓️</span><span class="nav-label">行程</span></div>
-  <div class="nav-item" id="nav-accounting" onclick="switchPage('accounting')"><span class="nav-icon">💰</span><span class="nav-label">記帳</span></div>
-  <div class="nav-item" id="nav-checklist" onclick="switchPage('checklist')"><span class="nav-icon">✅</span><span class="nav-label">清單</span></div>
-  <div class="nav-item" id="nav-info" onclick="switchPage('info')"><span class="nav-icon">ℹ️</span><span class="nav-label">資訊</span></div>
-</div>
-</div><!-- end app -->
-
-<script type="module">
-import { initItinerary, renderItinerary } from './js/itinerary.js';
-import { initAccounting, renderAccounting, switchAccTab, switchPersonalTab } from './js/accounting.js';
-import { initChecklist, renderCL } from './js/checklist.js';
-
-// ── Page Switch ──
-window.switchPage = function(p) {
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('active'); const d = n.querySelector('.nav-dot'); if (d) d.remove(); });
-  document.getElementById('page-' + p).classList.add('active');
-  const nav = document.getElementById('nav-' + p);
-  if (nav) { nav.classList.add('active'); const d = document.createElement('div'); d.className = 'nav-dot'; nav.appendChild(d); }
-  document.getElementById('page-container').scrollTop = 0;
-  if (p === 'itinerary') renderItinerary();
-  if (p === 'accounting') renderAccounting();
-  if (p === 'checklist') renderCL();
+const TYPE_STYLE = {
+  航班:{bg:'rgba(61,111,212,.18)',color:'#7baaf9'},
+  集合:{bg:'rgba(45,125,168,.18)',color:'#6bb8e0'},
+  交通:{bg:'rgba(107,91,149,.18)',color:'#a994d4'},
+  飯店:{bg:'rgba(45,138,110,.18)',color:'#6dc7a0'},
+  景點:{bg:'rgba(196,125,43,.18)',color:'#e5a84a'},
+  用餐:{bg:'rgba(196,75,107,.18)',color:'#e07a9a'},
+  其他:{bg:'rgba(85,94,114,.18)',color:'#8891a8'},
+  購物:{bg:'rgba(130,90,180,.18)',color:'#c49ef5'},
+  活動:{bg:'rgba(76,175,130,.18)',color:'#6dc7a0'},
+  住宿:{bg:'rgba(245,200,66,.18)',color:'#f5c842'},
 };
 
-// ── Time & Countdown ──
-const DEPART = new Date('2026-05-16T06:30:00+08:00');
-function pad(n) { return String(n).padStart(2,'0'); }
-function tick() {
-  const now = new Date();
-  const t = now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',hour12:false});
-  ['cur-time','it-time','inf-time'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = t; });
-  const twEl = document.getElementById('tw-t'); if (twEl) twEl.textContent = t;
-  const thai = new Date(now.toLocaleString('en-US',{timeZone:'Asia/Bangkok'}));
-  const thEl = document.getElementById('th-t'); if (thEl) thEl.textContent = thai.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',hour12:false});
-  const diff = DEPART - now;
-  if (diff > 0) {
-    document.getElementById('cd-d').textContent = Math.floor(diff/86400000);
-    document.getElementById('cd-h').textContent = pad(Math.floor((diff%86400000)/3600000));
-    document.getElementById('cd-m').textContent = pad(Math.floor((diff%3600000)/60000));
-    document.getElementById('cd-s').textContent = pad(Math.floor((diff%60000)/1000));
-  } else {
-    document.getElementById('cd-d').textContent = '0';
-    ['cd-h','cd-m','cd-s'].forEach(id => document.getElementById(id).textContent = '00');
-  }
-}
-setInterval(tick, 1000); tick();
+const FAMS = [
+  {id:'shared',name:'共用',color:'#8891a8',bg:'rgba(136,145,168,.2)',av:'🌐'},
+  {id:'ball',name:'球一家',color:'#4caf82',bg:'rgba(76,175,130,.2)',av:'球'},
+  {id:'eva',name:'EVA一家',color:'#4f8ef7',bg:'rgba(79,142,247,.2)',av:'E'},
+  {id:'chen',name:'辰一家',color:'#f5c842',bg:'rgba(245,200,66,.2)',av:'辰'},
+  {id:'abi',name:'阿逼',color:'#ffa657',bg:'rgba(255,166,87,.2)',av:'逼'},
+  {id:'abidi',name:'逼弟',color:'#c49ef5',bg:'rgba(196,158,245,.2)',av:'弟'},
+  {id:'gege',name:'國民堂哥',color:'#56d4d4',bg:'rgba(86,212,212,.2)',av:'哥'},
+];
 
-// ── Weather ──
-const OWM_KEY = 'demo'; // 替換為真實的 OpenWeatherMap API Key
-async function loadWeather() {
-  try {
-    const icons = {Clear:'☀️',Clouds:'⛅',Rain:'🌧️',Thunderstorm:'⛈️',Drizzle:'🌦️',Snow:'🌨️',Mist:'🌫️',Haze:'🌫️'};
-    const cities = [
-      { id: '1609350', temp: 'bkk-temp', desc: 'bkk-desc', hum: 'bkk-hum', icon: 'bkk-icon' },
-      { id: '1607929', temp: 'samet-temp', desc: 'samet-desc', hum: 'samet-hum', icon: 'samet-icon' },
-    ];
-    for (const city of cities) {
-      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${city.id}&appid=${OWM_KEY}&units=metric&lang=zh_tw`);
-      if (!res.ok) continue;
-      const d = await res.json();
-      const temp = document.getElementById(city.temp);
-      const desc = document.getElementById(city.desc);
-      const hum = document.getElementById(city.hum);
-      const icon = document.getElementById(city.icon);
-      if (temp) temp.textContent = Math.round(d.main.temp) + '°';
-      if (desc) desc.textContent = d.weather[0].description + `，體感 ${Math.round(d.main.feels_like)}°`;
-      if (hum) hum.textContent = `濕度 ${d.main.humidity}%`;
-      if (icon) icon.textContent = icons[d.weather[0].main] || '🌡️';
-    }
-  } catch(e) { console.log('Weather API error, using defaults'); }
+const CHECKLIST_CATS = [
+  {id:'doc',ic:'🪪',n:'證件文件',items:['護照（效期6個月以上）','回程機票截圖','TDAC QR Code','旅遊保險單']},
+  {id:'wash',ic:'🪥',n:'盥洗用品',items:['防曬乳 SPF50+','防蚊液','濕紙巾']},
+  {id:'med',ic:'💊',n:'藥品',items:['腸胃藥','退燒藥','OK繃','暈車藥']},
+  {id:'elec',ic:'🔌',n:'電子產品',items:['萬用插頭轉接頭','行動電源']},
+  {id:'other',ic:'📦',n:'其他',items:['泰銖現金','信用卡']},
+];
+
+
+
+
+// ── Countdown ──
+function useCountdown() {
+  const target = new Date('2026-05-16T06:30:00+08:00');
+  const [diff, setDiff] = useState(target - new Date());
+  useEffect(() => {
+    const t = setInterval(() => setDiff(target - new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const pad = n => String(Math.max(0, n)).padStart(2, '0');
+  return {
+    d: Math.max(0, Math.floor(diff / 86400000)),
+    h: pad(Math.floor((diff % 86400000) / 3600000)),
+    m: pad(Math.floor((diff % 3600000) / 60000)),
+    s: pad(Math.floor((diff % 60000) / 1000)),
+  };
 }
-loadWeather();
 
 // ── FX ──
-const defaultRates = {twd:0.895, usd:0.0278, jpy:4.19, krw:37.2};
-let rates = {...defaultRates};
-async function loadRates() {
-  try {
-    const res = await fetch('https://api.exchangerate-api.com/v4/latest/THB');
-    const d = await res.json();
-    if (d.rates) {
-      rates.twd = d.rates.TWD || rates.twd;
-      rates.usd = d.rates.USD || rates.usd;
-      rates.jpy = d.rates.JPY || rates.jpy;
-      rates.krw = d.rates.KRW || rates.krw;
-      updateFXDisplay();
-      document.getElementById('twd-r').textContent = `1 ฿ = ${rates.twd.toFixed(4)} NT$`;
-      document.getElementById('usd-r').textContent = `1 ฿ = ${rates.usd.toFixed(4)} $`;
-      document.getElementById('jpy-r').textContent = `1 ฿ = ${rates.jpy.toFixed(2)} ¥`;
-      document.getElementById('krw-r').textContent = `1 ฿ = ${rates.krw.toFixed(2)} ₩`;
-    }
-  } catch(e) { console.log('FX API error, using defaults'); }
+function FxCard() {
+  const [thb, setThb] = useState(1000);
+  const rates = { twd: 0.895, usd: 0.0278, jpy: 4.19, krw: 37.2 };
+  return (
+    <div className="fx-card">
+      <div className="fx-hdr"><span className="fx-title">快速換算</span><span style={{fontSize:12,color:'var(--acc)',cursor:'pointer'}}>自訂匯率</span></div>
+      <div className="fx-inp-row">
+        <div className="fx-wrap"><span className="fx-sym">฿</span><input className="fx-inp" type="number" value={thb} onChange={e=>setThb(+e.target.value)} inputMode="decimal"/></div>
+        <span style={{fontSize:13,color:'var(--t2)'}}>泰銖</span>
+      </div>
+      <div className="fx-div"/>
+      <div className="fx-results">
+        {[['🇹🇼 台幣 TWD','NT$ '+(Math.round(thb*rates.twd)).toLocaleString(),'1 ฿ = '+rates.twd+' NT$'],
+          ['🇺🇸 美金 USD','$ '+(thb*rates.usd).toFixed(2),'1 ฿ = '+rates.usd+' $'],
+          ['🇯🇵 日圓 JPY','¥ '+(Math.round(thb*rates.jpy)).toLocaleString(),'1 ฿ = '+rates.jpy+' ¥'],
+          ['🇰🇷 韓圜 KRW','₩ '+(Math.round(thb*rates.krw)).toLocaleString(),'1 ฿ = '+rates.krw+' ₩'],
+        ].map(([from,to,rate])=>(
+          <div key={from} className="fx-row">
+            <span className="fx-from">{from}</span>
+            <div style={{textAlign:'right'}}><div className="fx-to">{to}</div><div className="fx-rate">{rate}</div></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
-function updateFXDisplay() {
-  const thb = parseFloat(document.getElementById('thb-input').value) || 0;
-  document.getElementById('twd-v').textContent = 'NT$ ' + Math.round(thb*rates.twd).toLocaleString();
-  document.getElementById('usd-v').textContent = '$ ' + (thb*rates.usd).toFixed(2);
-  document.getElementById('jpy-v').textContent = '¥ ' + Math.round(thb*rates.jpy).toLocaleString();
-  document.getElementById('krw-v').textContent = '₩ ' + Math.round(thb*rates.krw).toLocaleString();
-}
-document.getElementById('thb-input').addEventListener('input', updateFXDisplay);
-updateFXDisplay();
-loadRates();
 
-window.showFxEdit = () => { document.getElementById('fx-modal').style.display='flex'; };
-window.closeFxEdit = () => { document.getElementById('fx-modal').style.display='none'; };
-window.saveFxRates = () => {
-  ['twd','usd','jpy','krw'].forEach(k => {
-    const v = parseFloat(document.getElementById('rate-'+k).value);
-    if (!isNaN(v)) rates[k] = v;
+// ── Home Page ──
+function HomePage({ onNav }) {
+  const cd = useCountdown();
+  return (
+    <div>
+      <div className="hdr"><div className="hdr-sub">🇹🇭 2026 泰國旅遊</div><div className="hdr-title">旅遊計畫總覽</div></div>
+      <div style={{padding:'0 0 16px'}}>
+        <div className="hero" style={{margin:'16px 16px 12px'}}>
+          <div style={{fontSize:11,fontWeight:600,color:'var(--tm)',letterSpacing:'.1em',textTransform:'uppercase',marginBottom:8}}>出發倒數</div>
+          <div className="cd-row">
+            {[['d','天'],['h','時'],['m','分'],['s','秒']].map(([k,l])=>(
+              <div key={k} className="cd-box"><div className="cd-num">{cd[k]}</div><div className="cd-lbl">{l}</div></div>
+            ))}
+          </div>
+          <div className="hero-sub">2026年5月16日（六）· 星宇航空 JX741 09:00</div>
+        </div>
+        <div className="quick-grid">
+          {[['🗓️','行程','itinerary'],['💰','記帳','accounting'],['🧳','清單','checklist'],['ℹ️','資訊','info']].map(([icon,label,page])=>(
+            <div key={page} className="qbtn" onClick={()=>onNav(page)}>
+              <span className="qbtn-icon">{icon}</span><span className="qbtn-lbl">{label}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{margin:'0 16px 8px'}}><div className="sec-title" style={{padding:0,marginBottom:10}}>即時天氣</div></div>
+        <div className="wx-row">
+          <div className="wx-card"><div className="wx-icon">☀️</div><div className="wx-city">曼谷 Bangkok</div><div className="wx-temp">34°</div><div className="wx-desc">晴，體感 38°</div></div>
+          <div className="wx-card"><div className="wx-icon">⛅</div><div className="wx-city">沙美島 Koh Samet</div><div className="wx-temp">31°</div><div className="wx-desc">多雲，體感 34°</div></div>
+        </div>
+        <div style={{margin:'0 16px 8px'}}><div className="sec-title" style={{padding:0,marginBottom:10}}>匯率換算</div></div>
+        <FxCard/>
+        <div style={{height:16}}/>
+        <div className="link-btn blue" onClick={()=>window.open('https://tdac.immigration.go.th','_blank')}>
+          <div style={{display:'flex',alignItems:'center',gap:12}}>
+            <div className="link-ic" style={{background:'rgba(79,142,247,.15)'}}>🛂</div>
+            <div><div className="link-t" style={{color:'var(--acc)'}}>TDAC 電子入境卡申請</div><div className="link-s">出發前72小時內完成 · 免費</div></div>
+          </div>
+          <span style={{fontSize:18,color:'var(--t2)'}}>›</span>
+        </div>
+        <div className="link-btn red" onClick={()=>onNav('info')}>
+          <div className="link-ic" style={{background:'rgba(224,82,82,.15)'}}>🚨</div>
+          <div><div className="link-t" style={{color:'var(--red)'}}>緊急電話快速撥打</div><div className="link-s">觀光警察 1155 · 救護車 1669 · 駐泰辦事處</div></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Type icons ──
+const TYPE_ICON = {
+  航班:'✈️', 集合:'📣', 交通:'🚌', 飯店:'🏨',
+  景點:'🗺️', 用餐:'🍜', 其他:'📌', 購物:'🛍️', 活動:'🎡', 住宿:'🛏️',
+};
+
+// ── Default whiteboard hints per day ──
+const DAY_HINTS = [
+  ['護照＆機票QR Code','出發前確認行李重量','換好泰銖'],
+  ['帶購物袋','穿透氣的鞋','注意防扒'],
+  ['早起！06:20集合','防曬乳＋帽子','帶現金（博藍餐廳自費）'],
+  ['行李整理好先放飯店','帶好泳衣','島上盡量帶現金'],
+  ['防曬！防曬！防曬！','水上活動帶防水袋','相機記得防水'],
+  ['Check out前確認行李','ICON SIAM有超市可採買'],
+  ['辰一家今天回台！','碼頭夜市帶現金'],
+  ['最後購物機會！','把伴手禮塞進行李'],
+  ['確認TDAC QR Code','提早3小時到機場','記得換回台幣'],
+];
+
+// ── Itinerary Page ──
+function ItineraryPage() {
+  const [dayIdx, setDayIdx] = useState(0);
+  const [allItems, setAllItems] = useState(DAYS.map(d=>[...d.items]));
+  const [dragIdx, setDragIdx] = useState(null);
+  const [overIdx, setOverIdx] = useState(null);
+  // Whiteboard hints (editable per day)
+  const [hints, setHints] = useState(DAY_HINTS.map(h=>[...h]));
+  const [hintInput, setHintInput] = useState('');
+  // Daily todos
+  const [todos, setTodos] = useState(DAYS.map(()=>[
+    {id:'t1',text:'拍 Reels',done:false},
+    {id:'t2',text:'景點合照',done:false},
+  ]));
+  const [todoInput, setTodoInput] = useState('');
+
+  const day = DAYS[dayIdx];
+  const dayItems = allItems[dayIdx];
+  const dayHints = hints[dayIdx];
+  const dayTodos = todos[dayIdx];
+
+  const reorder = (from, to) => {
+    if (from === to || to < 0 || to >= dayItems.length) return;
+    setAllItems(prev => {
+      const next = prev.map(d=>[...d]);
+      const [moved] = next[dayIdx].splice(from, 1);
+      next[dayIdx].splice(to, 0, moved);
+      return next;
+    });
+  };
+
+  const addHint = () => {
+    if (!hintInput.trim()) return;
+    setHints(prev => { const n=[...prev]; n[dayIdx]=[...n[dayIdx],hintInput.trim()]; return n; });
+    setHintInput('');
+  };
+  const delHint = (i) => setHints(prev=>{ const n=[...prev]; n[dayIdx]=n[dayIdx].filter((_,j)=>j!==i); return n; });
+
+  const addTodo = () => {
+    if (!todoInput.trim()) return;
+    setTodos(prev=>{ const n=[...prev]; n[dayIdx]=[...n[dayIdx],{id:'t'+Date.now(),text:todoInput.trim(),done:false}]; return n; });
+    setTodoInput('');
+  };
+  const togTodo = (id) => setTodos(prev=>{ const n=[...prev]; n[dayIdx]=n[dayIdx].map(t=>t.id===id?{...t,done:!t.done}:t); return n; });
+  const delTodo = (id) => setTodos(prev=>{ const n=[...prev]; n[dayIdx]=n[dayIdx].filter(t=>t.id!==id); return n; });
+
+  const doneCnt = dayTodos.filter(t=>t.done).length;
+
+  return (
+    <div>
+      <div className="it-hdr">
+        <div style={{fontSize:11,fontWeight:600,color:'var(--tm)',letterSpacing:'.1em',textTransform:'uppercase',marginBottom:4}}>✈ 旅行行程表</div>
+        <div style={{fontSize:20,fontWeight:700,color:'var(--t1)',marginBottom:14}}>泰國2026 旅行計畫</div>
+        <div className="dtabs">
+          {DAYS.map((d,i)=>(
+            <button key={i} className={`dtab${i===dayIdx?' active':''}`} onClick={()=>{setDayIdx(i);setHintInput('');setTodoInput('');}}>
+              <span className="dtab-d">{d.date}</span><span className="dtab-w">（{d.wd}）</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="it-main">
+
+        {/* ── 集合白板 ── */}
+        <div className="meet-banner">
+          <div className="meet-lbl">📣 集合時間</div>
+          <div className="meet-time">{day.mt}</div>
+          <div className="meet-place">📍 {day.mp}</div>
+
+          {/* 小白板區塊 */}
+          <div style={{marginTop:16,paddingTop:14,borderTop:'1px dashed rgba(245,200,66,.3)'}}>
+            <div style={{fontSize:11,fontWeight:600,color:'rgba(245,200,66,.7)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:10,display:'flex',alignItems:'center',gap:6}}>
+              <span>📋</span> 今日帶什麼出門？
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:6,marginBottom:10}}>
+              {dayHints.map((h,i)=>(
+                <div key={i} style={{display:'flex',alignItems:'center',gap:8,background:'rgba(255,255,255,.04)',borderRadius:8,padding:'7px 10px'}}>
+                  <span style={{fontSize:13,color:'rgba(245,200,66,.5)',flexShrink:0}}>•</span>
+                  <span style={{flex:1,fontSize:13,color:'var(--t2)',lineHeight:1.4}}>{h}</span>
+                  <span onClick={()=>delHint(i)} style={{fontSize:13,color:'rgba(255,255,255,.2)',cursor:'pointer',padding:'0 4px'}}>✕</span>
+                </div>
+              ))}
+            </div>
+            <div style={{display:'flex',gap:6}}>
+              <input
+                value={hintInput} onChange={e=>setHintInput(e.target.value)}
+                onKeyDown={e=>e.key==='Enter'&&addHint()}
+                placeholder="新增提醒..."
+                style={{flex:1,background:'rgba(255,255,255,.06)',border:'1px dashed rgba(245,200,66,.25)',borderRadius:8,padding:'7px 10px',fontSize:12,color:'var(--t1)',outline:'none',fontFamily:'inherit'}}
+              />
+              <div onClick={addHint} style={{padding:'7px 12px',background:'rgba(245,200,66,.15)',borderRadius:8,fontSize:12,color:'var(--gold)',cursor:'pointer',border:'1px solid rgba(245,200,66,.25)'}}>＋</div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 待辦清單 ── */}
+        <div style={{background:'var(--bgc)',border:'1px solid var(--bd)',borderRadius:14,padding:14,marginBottom:16}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
+            <div style={{fontSize:13,fontWeight:600,color:'var(--t1)',display:'flex',alignItems:'center',gap:8}}>
+              <span>🎬 今日待辦</span>
+              <span style={{fontSize:11,background:'rgba(79,142,247,.15)',color:'var(--acc)',padding:'2px 8px',borderRadius:20}}>{doneCnt}/{dayTodos.length}</span>
+            </div>
+          </div>
+          {dayTodos.length===0&&<div style={{fontSize:12,color:'var(--tm)',textAlign:'center',padding:'8px 0'}}>還沒有待辦，新增一個吧</div>}
+          <div style={{display:'flex',flexDirection:'column',gap:6,marginBottom:10}}>
+            {dayTodos.map(t=>(
+              <div key={t.id} style={{display:'flex',alignItems:'center',gap:10,padding:'6px 0',borderBottom:'1px solid var(--bd)'}}>
+                <div onClick={()=>togTodo(t.id)} style={{width:20,height:20,borderRadius:6,border:`1.5px solid ${t.done?'var(--acc)':'var(--bd)'}`,background:t.done?'var(--acc)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',flexShrink:0,transition:'all .15s'}}>
+                  {t.done&&<span style={{fontSize:11,color:'#fff',fontWeight:700}}>✓</span>}
+                </div>
+                <span style={{flex:1,fontSize:13,color:t.done?'var(--tm)':'var(--t1)',textDecoration:t.done?'line-through':'none'}}>{t.text}</span>
+                <span onClick={()=>delTodo(t.id)} style={{fontSize:13,color:'var(--tm)',cursor:'pointer',padding:'2px 4px'}}>✕</span>
+              </div>
+            ))}
+          </div>
+          <div style={{display:'flex',gap:6}}>
+            <input
+              value={todoInput} onChange={e=>setTodoInput(e.target.value)}
+              onKeyDown={e=>e.key==='Enter'&&addTodo()}
+              placeholder="新增待辦..."
+              style={{flex:1,background:'var(--bgi)',border:'1px solid var(--bd)',borderRadius:8,padding:'7px 10px',fontSize:13,color:'var(--t1)',outline:'none',fontFamily:'inherit'}}
+            />
+            <div onClick={addTodo} style={{padding:'7px 14px',background:'var(--acc)',borderRadius:8,fontSize:13,color:'#fff',cursor:'pointer',fontWeight:600}}>＋</div>
+          </div>
+        </div>
+
+        {/* ── 當日行程 ── */}
+        <div className="it-sec-hdr">
+          <span className="it-sec-lbl">當日行程</span>
+          <button className="add-btn">＋ 新增行程</button>
+        </div>        <div className="it-list"
+          onDragOver={e=>e.preventDefault()}
+          onDrop={e=>{e.preventDefault();if(dragIdx!==null&&overIdx!==null)reorder(dragIdx,overIdx);setDragIdx(null);setOverIdx(null);}}
+        >
+          {dayItems.map((item,idx)=>{
+            const ts=TYPE_STYLE[item.type]||{bg:'rgba(85,94,114,.18)',color:'#8891a8'};
+            const icon=TYPE_ICON[item.type]||'📌';
+            return (
+              <div key={item.id} className="it-card" draggable
+                onDragStart={()=>setDragIdx(idx)}
+                onDragEnd={()=>{setDragIdx(null);setOverIdx(null);}}
+                onDragEnter={()=>setOverIdx(idx)}
+                style={{opacity:dragIdx===idx?0.4:1,outline:overIdx===idx&&dragIdx!==idx?'2px solid var(--acc)':'none',borderRadius:14,transition:'opacity .15s'}}
+              >
+                <div className="it-handle" style={{cursor:'grab'}}>⠿</div>
+                <div className="it-time-col"><div className="it-time">{item.time}</div></div>
+                <div className="it-body">
+                  <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:5}}>
+                    <span style={{fontSize:16}}>{icon}</span>
+                    <span className="it-tag" style={{background:ts.bg,color:ts.color}}>{item.type}</span>
+                  </div>
+                  <div className="it-title">{item.title}</div>
+                  {item.note && <div className="it-note">{item.note}</div>}
+                </div>
+                <div className="it-actions">
+                  <div className="it-btn" onClick={()=>reorder(idx,idx-1)} style={{opacity:idx===0?0.3:1,fontSize:11}}>▲</div>
+                  <div className="it-btn edit">✎</div>
+                  <div className="it-btn" onClick={()=>reorder(idx,idx+1)} style={{opacity:idx===dayItems.length-1?0.3:1,fontSize:11}}>▼</div>
+                  <div className="it-btn del">✕</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ── 精選照片 ── */}
+        <div style={{marginTop:20}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
+            <span style={{fontSize:12,fontWeight:600,color:'var(--tm)',letterSpacing:'.08em',textTransform:'uppercase'}}>📸 今日精選照片</span>
+            <label style={{fontSize:12,color:'var(--acc)',cursor:'pointer'}}>
+              上傳照片
+              <input type="file" accept="image/*" multiple style={{display:'none'}} onChange={e=>{
+                const files=[...e.target.files];
+                if(!files.length) return;
+                alert(`已選取 ${files.length} 張照片（正式版上傳後會同步給所有人）`);
+                e.target.value='';
+              }}/>
+            </label>
+          </div>
+          <div style={{background:'var(--bgc)',border:'1px dashed var(--bd)',borderRadius:14,padding:'28px 20px',textAlign:'center'}}>
+            <div style={{fontSize:32,marginBottom:8}}>📷</div>
+            <div style={{fontSize:13,color:'var(--t2)'}}>今天還沒有照片</div>
+            <div style={{fontSize:11,color:'var(--tm)',marginTop:4}}>上傳後會同步給所有團員</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+// ── Accounting ──
+const CAT_MAP = {
+  food:{i:'🍜',l:'餐飲',bg:'rgba(76,175,130,.15)',c:'#6dc7a0'},
+  transport:{i:'🚌',l:'交通',bg:'rgba(107,91,149,.15)',c:'#a994d4'},
+  shopping:{i:'🛍️',l:'購物',bg:'rgba(130,90,180,.15)',c:'#c49ef5'},
+  activity:{i:'🎡',l:'活動',bg:'rgba(196,125,43,.15)',c:'#e5a84a'},
+  hotel:{i:'🏨',l:'住宿',bg:'rgba(245,200,66,.15)',c:'#f5c842'},
+  other:{i:'📌',l:'其他',bg:'rgba(85,94,114,.15)',c:'#8891a8'},
+};
+const MEM_COLORS = {
+  球:{color:'#4caf82',bg:'rgba(76,175,130,.2)'},哭A:{color:'#4caf82',bg:'rgba(76,175,130,.2)'},
+  COODY:{color:'#4caf82',bg:'rgba(76,175,130,.2)'},小葵:{color:'#4caf82',bg:'rgba(76,175,130,.2)'},
+  EVA:{color:'#4f8ef7',bg:'rgba(79,142,247,.2)'},龍哥:{color:'#4f8ef7',bg:'rgba(79,142,247,.2)'},
+  樂樂:{color:'#4f8ef7',bg:'rgba(79,142,247,.2)'},菲菲:{color:'#4f8ef7',bg:'rgba(79,142,247,.2)'},
+  泰辰:{color:'#f5c842',bg:'rgba(245,200,66,.2)'},NiNi:{color:'#f5c842',bg:'rgba(245,200,66,.2)'},
+  阿逼:{color:'#ffa657',bg:'rgba(255,166,87,.2)'},逼弟:{color:'#c49ef5',bg:'rgba(196,158,245,.2)'},
+  國民堂哥:{color:'#56d4d4',bg:'rgba(86,212,212,.2)'},
+};
+const ALL_PAYERS   = ['球','哭A','EVA','龍哥','泰辰','阿逼','逼弟','國民堂哥'];
+const ALL_ADULTS   = ['球','哭A','EVA','龍哥','泰辰','阿逼','逼弟','國民堂哥'];
+const ALL_KIDS     = ['COODY','小葵','樂樂','菲菲','NiNi'];
+const ALL_MEMBERS  = [...ALL_ADULTS,...ALL_KIDS];
+const THB_RATE = 0.895;
+
+function toTHB(a,c){return c==='THB'?a:Math.round(a/THB_RATE);}
+function splitLabel(s){
+  if(Array.isArray(s)) return s.length<=3?s.join('、'):s.slice(0,3).join('、')+'…等'+s.length+'人';
+  return {all13:'全部13人',adults:'大人8人'}[s]||s;
+}
+function perHead(a,c,s){
+  const n=s==='all13'?13:s==='adults'?8:Array.isArray(s)?s.length:1;
+  return Math.round(toTHB(a,c)/n);
+}
+function getMembersOf(s){
+  if(s==='all13') return ALL_MEMBERS;
+  if(s==='adults') return ALL_ADULTS;
+  if(Array.isArray(s)) return s;
+  return [s];
+}
+function calcSettlements(expenses){
+  const bal={};ALL_MEMBERS.forEach(m=>bal[m]=0);
+  expenses.filter(e=>!e.verified).forEach(e=>{
+    const pp=perHead(e.amount,e.currency,e.split);
+    getMembersOf(e.split).forEach(m=>{bal[m]=(bal[m]||0)-pp;});
+    bal[e.payer]=(bal[e.payer]||0)+toTHB(e.amount,e.currency);
   });
-  updateFXDisplay();
-  window.closeFxEdit();
-};
-
-// ── Home checklist preview (共用清單) ──
-function renderHomeChecklist() {
-  // 從 checklist 狀態讀取共用清單前5項
-  const items = [
-    {text:'護照（效期6個月以上）',on:false},{text:'TDAC 電子入境卡申請',on:false},
-    {text:'防曬乳 SPF 50+',on:false},{text:'泰銖換錢',on:false},{text:'星宇機票確認',on:true},
-  ];
-  const done = items.filter(i=>i.on).length, tot = items.length;
-  document.getElementById('h-badge').textContent = done+' / '+tot;
-  document.getElementById('h-prog').style.width = Math.round(done/tot*100)+'%';
-  document.getElementById('h-todos').innerHTML = items.map((it,i)=>
-    `<div class="h-todo-item">
-      <div class="hchk${it.on?' on':''}" onclick="toggleHItem(${i})"></div>
-      <span class="h-todo-text${it.on?' done':''}">${it.text}</span>
-    </div>`
-  ).join('');
+  const sets=[];
+  const deb=Object.entries(bal).filter(([,v])=>v<-5).sort((a,b)=>a[1]-b[1]);
+  const cre=Object.entries(bal).filter(([,v])=>v>5).sort((a,b)=>b[1]-a[1]);
+  let di=0,ci=0;
+  while(di<deb.length&&ci<cre.length){
+    const[dn,dv]=deb[di],[cn,cv]=cre[ci];
+    const amt=Math.min(-dv,cv);
+    if(amt>5) sets.push({from:dn,to:cn,amount:Math.round(amt)});
+    deb[di][1]+=amt;cre[ci][1]-=amt;
+    if(Math.abs(deb[di][1])<5)di++;if(Math.abs(cre[ci][1])<5)ci++;
+  }
+  return sets;
 }
-window.toggleHItem = function(i) {};
-renderHomeChecklist();
 
-// ── Info ──
-window.toggleInfo = id => {
-  const body = document.getElementById('body-'+id), chev = document.getElementById('chev-'+id);
-  if (!body) return;
-  body.classList.toggle('hidden');
-  chev.className = 'info-chev' + (body.classList.contains('hidden') ? '' : ' open');
-};
-window.switchArea = area => {
-  document.getElementById('atab-bkk').className = 'atab'+(area==='bkk'?' active':'');
-  document.getElementById('atab-samet').className = 'atab'+(area==='samet'?' active':'');
-  document.getElementById('area-bkk').className = area==='bkk'?'':'hidden';
-  document.getElementById('area-samet').className = area==='samet'?'':'hidden';
-};
+function AddExpModal({onClose,onAdd}){
+  const [title,setTitle]=useState('');
+  const [amount,setAmount]=useState('');
+  const [currency,setCurrency]=useState('THB');
+  const [cat,setCat]=useState('food');
+  const [payer,setPayer]=useState('球');
+  const [splitMode,setSplitMode]=useState('all13');
+  const [selPeople,setSelPeople]=useState([...ALL_MEMBERS]);
+  const [date,setDate]=useState('');
+  const DATES=['5/16','5/17','5/18','5/19','5/20','5/21','5/22','5/23','5/24'];
 
-// ── Init all modules ──
-document.getElementById('loading').style.display = 'none';
-await initItinerary();
-initAccounting();
-await initChecklist();
+  const handleSplitMode=m=>{
+    setSplitMode(m);
+    if(m==='all13') setSelPeople([...ALL_MEMBERS]);
+    else if(m==='adults') setSelPeople([...ALL_ADULTS]);
+    else if(m==='custom') setSelPeople([]);
+  };
+  const toggleP=p=>{
+    setSplitMode('custom');
+    setSelPeople(prev=>prev.includes(p)?prev.filter(x=>x!==p):[...prev,p]);
+  };
+  const getFinal=()=>splitMode==='all13'?'all13':splitMode==='adults'?'adults':selPeople;
+
+  const handleAdd=()=>{
+    if(!title||!amount) return alert('請填寫名稱和金額');
+    const fs=getFinal();
+    if(Array.isArray(fs)&&fs.length===0) return alert('請至少選一位分攤對象');
+    onAdd({id:'e_'+Date.now(),title,amount:parseFloat(amount),currency,cat,payer,split:fs,date,verified:false});
+    onClose();
+  };
+
+  const mS={position:'fixed',inset:0,background:'rgba(0,0,0,.8)',zIndex:200,display:'flex',alignItems:'flex-end',justifyContent:'center'};
+  const sS={width:'100%',maxWidth:390,background:'var(--bg2)',borderRadius:'20px 20px 0 0',padding:'20px 20px 44px',border:'1px solid var(--bdl)',maxHeight:'92vh',overflowY:'auto'};
+  const lS={fontSize:11,fontWeight:600,color:'var(--tm)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:6,display:'block'};
+  const iS={width:'100%',background:'var(--bgi)',border:'1px solid var(--bd)',borderRadius:8,padding:'11px 14px',fontSize:15,color:'var(--t1)',outline:'none',fontFamily:'inherit'};
+
+  return(
+    <div style={mS} onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div style={sS}>
+        <div style={{width:36,height:4,background:'var(--bdl)',borderRadius:2,margin:'0 auto 18px'}}/>
+        <div style={{fontSize:18,fontWeight:700,color:'var(--t1)',marginBottom:18}}>新增費用</div>
+
+        <div style={{marginBottom:14}}>
+          <label style={lS}>店名／說明</label>
+          <input style={iS} placeholder="例：海鮮午餐" value={title} onChange={e=>setTitle(e.target.value)}/>
+        </div>
+
+        <div style={{marginBottom:14}}>
+          <label style={lS}>金額</label>
+          <div style={{display:'flex',gap:8}}>
+            <div style={{display:'flex',background:'var(--bgc)',borderRadius:8,border:'1px solid var(--bd)',overflow:'hidden',flexShrink:0}}>
+              {[['THB','฿ 泰銖'],['TWD','NT$ 台幣']].map(([c,l])=>(
+                <div key={c} onClick={()=>setCurrency(c)} style={{padding:'11px 12px',fontSize:12,fontWeight:600,cursor:'pointer',background:currency===c?'var(--acc)':'transparent',color:currency===c?'#fff':'var(--t2)',transition:'all .15s'}}>{l}</div>
+              ))}
+            </div>
+            <input style={{flex:1,...iS,fontFamily:"'DM Mono',monospace",fontSize:18}} type="number" placeholder="0" inputMode="decimal" value={amount} onChange={e=>setAmount(e.target.value)}/>
+          </div>
+          {amount&&<div style={{fontSize:11,color:'var(--grn)',marginTop:5}}>
+            {currency==='THB'?`≈ NT$ ${Math.round(parseFloat(amount)*THB_RATE).toLocaleString()}`:`≈ ฿ ${Math.round(parseFloat(amount)/THB_RATE).toLocaleString()}`}
+          </div>}
+        </div>
+
+        <div style={{marginBottom:14}}>
+          <label style={lS}>費用類型</label>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:6}}>
+            {Object.entries(CAT_MAP).map(([k,v])=>(
+              <div key={k} onClick={()=>setCat(k)} style={{padding:'8px 6px',borderRadius:8,border:`1px solid ${cat===k?v.c:'var(--bd)'}`,background:cat===k?v.bg:'var(--bgi)',fontSize:12,color:cat===k?v.c:'var(--t2)',textAlign:'center',cursor:'pointer',transition:'all .15s'}}>{v.i} {v.l}</div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{marginBottom:14}}>
+          <label style={lS}>付款人</label>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+            {ALL_PAYERS.map(p=>{const mc=MEM_COLORS[p]||{color:'#8891a8',bg:'rgba(136,145,168,.2)'};return(
+              <div key={p} onClick={()=>setPayer(p)} style={{padding:'6px 14px',borderRadius:20,border:`1px solid ${payer===p?mc.color:'var(--bd)'}`,background:payer===p?mc.bg:'var(--bgi)',fontSize:13,color:payer===p?mc.color:'var(--t2)',cursor:'pointer',transition:'all .15s'}}>{p}</div>
+            );})}
+          </div>
+        </div>
+
+        <div style={{marginBottom:14}}>
+          <label style={lS}>分攤對象</label>
+          <div style={{display:'flex',gap:6,marginBottom:10}}>
+            {[['all13','全部13人'],['adults','大人8人']].map(([v,l])=>(
+              <div key={v} onClick={()=>handleSplitMode(v)} style={{flex:1,padding:'9px',borderRadius:10,border:`1px solid ${splitMode===v?'var(--acc)':'var(--bd)'}`,background:splitMode===v?'rgba(79,142,247,.08)':'var(--bgi)',fontSize:13,color:splitMode===v?'var(--acc)':'var(--t2)',cursor:'pointer',textAlign:'center',transition:'all .15s'}}>{l}</div>
+            ))}
+            <div onClick={()=>handleSplitMode('custom')} style={{flex:1,padding:'9px',borderRadius:10,border:`1px solid ${splitMode==='custom'?'var(--gold)':'var(--bd)'}`,background:splitMode==='custom'?'rgba(245,200,66,.08)':'var(--bgi)',fontSize:13,color:splitMode==='custom'?'var(--gold)':'var(--t2)',cursor:'pointer',textAlign:'center',transition:'all .15s'}}
+            >自訂</div>
+          </div>
+          <div style={{fontSize:11,color:'var(--tm)',marginBottom:6}}>大人</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6,marginBottom:8}}>
+            {ALL_ADULTS.map(p=>{const mc=MEM_COLORS[p]||{color:'#8891a8',bg:'rgba(136,145,168,.2)'};const sel=selPeople.includes(p);return(
+              <div key={p} onClick={()=>toggleP(p)} style={{padding:'6px 14px',borderRadius:20,border:`1px solid ${sel?mc.color:'var(--bd)'}`,background:sel?mc.bg:'var(--bgi)',fontSize:13,color:sel?mc.color:'var(--t2)',cursor:'pointer',display:'flex',alignItems:'center',gap:4,transition:'all .15s'}}>
+                {sel&&<span style={{fontSize:10,fontWeight:700}}>✓</span>}{p}
+              </div>
+            );})}
+          </div>
+          <div style={{fontSize:11,color:'var(--tm)',marginBottom:6}}>小孩</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+            {ALL_KIDS.map(p=>{const mc=MEM_COLORS[p]||{color:'#8891a8',bg:'rgba(136,145,168,.2)'};const sel=selPeople.includes(p);return(
+              <div key={p} onClick={()=>toggleP(p)} style={{padding:'6px 14px',borderRadius:20,border:`1px solid ${sel?mc.color:'var(--bd)'}`,background:sel?mc.bg:'var(--bgi)',fontSize:13,color:sel?mc.color:'var(--t2)',cursor:'pointer',display:'flex',alignItems:'center',gap:4,transition:'all .15s'}}>
+                {sel&&<span style={{fontSize:10,fontWeight:700}}>✓</span>}{p}
+              </div>
+            );})}
+          </div>
+          {selPeople.length>0&&<div style={{fontSize:11,color:'var(--grn)',marginTop:6}}>已選 {selPeople.length} 人：{selPeople.join('、')}</div>}
+        </div>
+
+        <div style={{marginBottom:20}}>
+          <label style={lS}>日期</label>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+            {DATES.map(d=>(
+              <div key={d} onClick={()=>setDate(date===d?'':d)} style={{padding:'7px 14px',borderRadius:20,border:`1px solid ${date===d?'var(--gold)':'var(--bd)'}`,background:date===d?'rgba(245,200,66,.12)':'var(--bgi)',fontSize:13,fontWeight:date===d?600:400,color:date===d?'var(--gold)':'var(--t2)',cursor:'pointer',transition:'all .15s'}}>{d}</div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{display:'flex',gap:10}}>
+          <div onClick={onClose} style={{flex:1,padding:14,borderRadius:8,border:'1px solid var(--bd)',background:'rgba(255,255,255,.05)',fontSize:15,fontWeight:600,color:'var(--t2)',textAlign:'center',cursor:'pointer'}}>取消</div>
+          <div onClick={handleAdd} style={{flex:2,padding:14,borderRadius:8,background:'var(--grn)',fontSize:15,fontWeight:700,color:'#0d0f14',textAlign:'center',cursor:'pointer'}}>確認新增</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AccountingPage(){
+  const [tab,setTab]=useState('group');
+  const [expenses,setExpenses]=useState([]);
+  const [showModal,setShowModal]=useState(false);
+  const [showHistory,setShowHistory]=useState(false);
+  const [paidSet,setPaidSet]=useState(new Set());
+
+  const totalTHB=expenses.reduce((a,e)=>a+toTHB(e.amount,e.currency),0);
+  const pending=expenses.filter(e=>!e.verified).length;
+  const settlements=calcSettlements(expenses);
+  const history=expenses.filter(e=>e.verified);
+
+  const handleAdd=exp=>setExpenses(p=>[exp,...p]);
+  const handleVerify=id=>setExpenses(p=>p.map(e=>e.id===id?{...e,verified:true}:e));
+  const handleDelete=id=>setExpenses(p=>p.filter(e=>e.id!==id));
+  const togglePaid=key=>setPaidSet(p=>{const n=new Set(p);n.has(key)?n.delete(key):n.add(key);return n;});
+
+  return(
+    <div>
+      <div className="acc-hdr">
+        <div><div className="hdr-sub">記帳</div><div className="hdr-title">旅遊支出</div></div>
+        <button className="new-btn" onClick={()=>setShowModal(true)}>＋ 新增</button>
+      </div>
+      <div className="sub-tabs">
+        <div className={`stab${tab==='group'?' active':''}`} onClick={()=>setTab('group')}>團體分帳</div>
+        <div className={`stab${tab==='personal'?' active':''}`} onClick={()=>setTab('personal')}>個人帳目</div>
+      </div>
+      <div className="sum-row">
+        <div className="sum-c"><div className="sum-l">總花費</div><div className="sum-v" style={{fontSize:14}}>฿ {totalTHB.toLocaleString()}</div><div className="sum-s">NT$ {Math.round(totalTHB*THB_RATE).toLocaleString()}</div></div>
+        <div className="sum-c"><div className="sum-l">筆數</div><div className="sum-v">{expenses.length}</div><div className="sum-s">筆費用</div></div>
+        <div className="sum-c"><div className="sum-l">待結算</div><div className="sum-v" style={{color:'var(--gold)'}}>{pending}</div><div className="sum-s">筆未核銷</div></div>
+      </div>
+
+      {tab==='group'&&<>
+        {settlements.length>0&&<>
+          <div className="sec-hdr"><span className="sec-lbl">💸 結算清單</span></div>
+          <div style={{padding:'0 16px',display:'flex',flexDirection:'column',gap:8,marginBottom:16}}>
+            {settlements.map((s,i)=>{
+              const key=`${s.from}-${s.to}`;const paid=paidSet.has(key);
+              const mf=MEM_COLORS[s.from]||{color:'#8891a8',bg:'rgba(136,145,168,.2)'};
+              const mt=MEM_COLORS[s.to]||{color:'#8891a8',bg:'rgba(136,145,168,.2)'};
+              return(
+                <div key={i} style={{background:'var(--bgc)',borderRadius:14,padding:14,border:`1px solid ${paid?'rgba(76,175,130,.3)':'var(--bd)'}`}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
+                    <div style={{display:'flex',alignItems:'center',gap:6,flex:1}}>
+                      <div style={{width:28,height:28,borderRadius:'50%',background:mf.bg,color:mf.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700}}>{s.from[0]}</div>
+                      <span style={{fontSize:14,fontWeight:600,color:'var(--t1)'}}>{s.from}</span>
+                    </div>
+                    <span style={{fontSize:12,color:'var(--tm)'}}>→ 付給</span>
+                    <div style={{display:'flex',alignItems:'center',gap:6,flex:1,justifyContent:'flex-end'}}>
+                      <span style={{fontSize:14,fontWeight:600,color:'var(--t1)'}}>{s.to}</span>
+                      <div style={{width:28,height:28,borderRadius:'50%',background:mt.bg,color:mt.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700}}>{s.to[0]}</div>
+                    </div>
+                  </div>
+                  <div style={{fontFamily:"'DM Mono',monospace",fontSize:18,fontWeight:500,color:'var(--gold)',marginBottom:8}}>
+                    ฿ {s.amount.toLocaleString()} <span style={{fontSize:12,color:'var(--t2)'}}>NT$ {Math.round(s.amount*THB_RATE).toLocaleString()}</span>
+                  </div>
+                  <div onClick={()=>togglePaid(key)} style={{padding:8,borderRadius:8,border:`1px solid ${paid?'rgba(76,175,130,.3)':'var(--bd)'}`,background:paid?'rgba(76,175,130,.08)':'var(--bgi)',fontSize:12,color:paid?'var(--grn)':'var(--t2)',textAlign:'center',cursor:'pointer',transition:'all .2s'}}>
+                    {paid?'✓ 已還款，點此取消':'確認已還款'}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>}
+        {settlements.length===0&&expenses.length>0&&(
+          <div style={{margin:'0 16px 16px',background:'rgba(76,175,130,.08)',border:'1px solid rgba(76,175,130,.2)',borderRadius:14,padding:16,textAlign:'center',color:'var(--grn)',fontSize:13}}>✓ 目前無待結算金額</div>
+        )}
+
+        <div className="sec-hdr">
+          <span className="sec-lbl">費用記錄</span>
+          <span style={{fontSize:12,color:'var(--acc)',cursor:'pointer'}} onClick={()=>setExpenses(p=>p.map(e=>({...e,verified:true})))}>一鍵全部核銷</span>
+        </div>
+
+        {expenses.length===0?(
+          <div style={{textAlign:'center',padding:'48px 24px',color:'var(--tm)'}}>
+            <div style={{fontSize:40,marginBottom:12}}>💳</div>
+            <div style={{fontSize:14,lineHeight:1.6}}>還沒有費用記錄<br/>點右上角 ＋ 新增第一筆</div>
+          </div>
+        ):(
+          <div className="exp-list">
+            {expenses.filter(e=>!e.verified).map(e=>{
+              const m=CAT_MAP[e.cat]||CAT_MAP.other;
+              const mc=MEM_COLORS[e.payer]||{color:'#8891a8',bg:'rgba(136,145,168,.2)'};
+              const ph=perHead(e.amount,e.currency,e.split);
+              const sym=e.currency==='THB'?'฿':'NT$';
+              return(
+                <div key={e.id} className="exp-c">
+                  <div className="exp-top">
+                    <div style={{flex:1,minWidth:0}}>
+                      <div style={{display:'flex',alignItems:'center',gap:5,marginBottom:5,flexWrap:'wrap'}}>
+                        <span className="exp-tag" style={{background:m.bg,color:m.c}}>{m.i} {m.l}</span>
+                        {e.date&&<span style={{fontSize:10,color:'var(--tm)'}}>{e.date}</span>}
+                        <span style={{fontSize:10,padding:'2px 6px',borderRadius:20,background:e.currency==='THB'?'rgba(245,200,66,.12)':'rgba(79,142,247,.12)',color:e.currency==='THB'?'var(--gold)':'var(--acc)'}}>
+                          {e.currency==='THB'?'泰銖':'台幣'}
+                        </span>
+                      </div>
+                      <div className="exp-ttl">{e.title}</div>
+                      <div className="exp-nt">人均 ฿{ph.toLocaleString()} · {splitLabel(e.split)}</div>
+                    </div>
+                    <div style={{textAlign:'right',flexShrink:0}}>
+                      <div className="exp-amt">{sym} {e.amount.toLocaleString()}</div>
+                      <div className="exp-twd">{e.currency==='THB'?`NT$ ${Math.round(e.amount*THB_RATE).toLocaleString()}`:`฿ ${Math.round(e.amount/THB_RATE).toLocaleString()}`}</div>
+                    </div>
+                  </div>
+                  <div className="exp-bot">
+                    <div className="exp-pay"><div className="av" style={{background:mc.bg,color:mc.color}}>{e.payer[0]}</div>{e.payer} 付款</div>
+                    <span className="exp-sp">{splitLabel(e.split)}</span>
+                  </div>
+                  <div className="exp-acts">
+                    <div className="exp-ab v" onClick={()=>handleVerify(e.id)}>✓ 核銷</div>
+                    <div className="exp-ab" onClick={()=>handleDelete(e.id)} style={{color:'var(--red)',flex:0.5}}>✕</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {history.length>0&&<>
+          <div className="sec-hdr">
+            <span className="sec-lbl">歷史記錄</span>
+            <span style={{fontSize:12,color:'var(--acc)',cursor:'pointer'}} onClick={()=>setShowHistory(h=>!h)}>
+              {showHistory?'收起':'展開'} ({history.length}筆)
+            </span>
+          </div>
+          {showHistory&&<div className="exp-list">
+            {history.map(e=>{
+              const m=CAT_MAP[e.cat]||CAT_MAP.other;
+              const mc=MEM_COLORS[e.payer]||{color:'#8891a8',bg:'rgba(136,145,168,.2)'};
+              return(
+                <div key={e.id} className="exp-c" style={{opacity:0.6}}>
+                  <div className="exp-top">
+                    <div style={{flex:1}}>
+                      <div style={{display:'flex',alignItems:'center',gap:5,marginBottom:4}}>
+                        <span className="exp-tag" style={{background:m.bg,color:m.c}}>{m.i} {m.l}</span>
+                        {e.date&&<span style={{fontSize:10,color:'var(--tm)'}}>{e.date}</span>}
+                      </div>
+                      <div className="exp-ttl">{e.title}</div>
+                      <div className="exp-nt">{splitLabel(e.split)}</div>
+                    </div>
+                    <div style={{textAlign:'right'}}><div className="exp-amt" style={{fontSize:16}}>{e.currency==='THB'?'฿':'NT$'} {e.amount.toLocaleString()}</div></div>
+                  </div>
+                  <div className="exp-bot">
+                    <div className="exp-pay"><div className="av" style={{background:mc.bg,color:mc.color}}>{e.payer[0]}</div>{e.payer} 付款</div>
+                    <span className="exp-ab vd" style={{flex:'none'}}>✓ 已核銷</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>}
+        </>}
+      </>}
+
+      {tab==='personal'&&(
+        <div style={{textAlign:'center',padding:'40px 24px',color:'var(--tm)',fontSize:13}}>
+          <div style={{fontSize:36,marginBottom:10}}>👤</div>個人帳目功能<br/>上傳正式版後可查看
+        </div>
+      )}
+      {showModal&&<AddExpModal onClose={()=>setShowModal(false)} onAdd={handleAdd}/>}
+    </div>
+  );
+}
+
+// ── Checklist Page ──
+function ChecklistPage() {
+  const [famIdx, setFamIdx] = useState(0);
+  const [checked, setChecked] = useState({});
+  const [collapsed, setCollapsed] = useState({});
+  const fam = FAMS[famIdx];
+  const allItems = CHECKLIST_CATS.flatMap(c=>c.items);
+  const doneCount = allItems.filter((_,i)=>checked[`${famIdx}-${i}`]).length;
+  const pct = allItems.length>0?Math.round(doneCount/allItems.length*100):0;
+  let globalIdx = 0;
+  return (
+    <div>
+      <div className="cl-hdr">
+        <div><div className="hdr-sub">打包清單</div><div className="hdr-title">行前準備</div></div>
+        <button className="reset-btn">全部重置</button>
+      </div>
+      <div className="fam-tabs">
+        {FAMS.map((f,i)=>(
+          <div key={f.id} className="ftab" onClick={()=>setFamIdx(i)}>
+            <div className={`ftab-av${i===famIdx?' sel':''}`} style={{background:f.bg,color:f.color}}>{f.av}</div>
+            <span className={`ftab-n${i===famIdx?' sel':''}`}>{f.name}</span>
+          </div>
+        ))}
+      </div>
+      <div className="cl-prog">
+        <div className="cl-pt"><span className="cl-pn">{fam.name}</span><span className="cl-pc">{doneCount} / {allItems.length}</span></div>
+        <div className="cl-track"><div className="cl-fill" style={{width:pct+'%',background:pct===100?'var(--gold)':'var(--grn)'}}/></div>
+        <div className="cl-pct" style={{color:pct===100?'var(--gold)':'var(--grn)'}}>{pct}% 完成</div>
+      </div>
+      {CHECKLIST_CATS.map(cat=>{
+        const catDone = cat.items.filter((_,j)=>checked[`${famIdx}-${globalIdx+j}`]).length;
+        const startIdx = globalIdx;
+        globalIdx += cat.items.length;
+        const coll = collapsed[`${famIdx}-${cat.id}`];
+        return (
+          <div key={cat.id} className="cat-sec">
+            <div className={`cat-hdr${coll?' coll':''}`} onClick={()=>setCollapsed(c=>({...c,[`${famIdx}-${cat.id}`]:!c[`${famIdx}-${cat.id}`]}))}>
+              <div className="cat-hl">
+                <span style={{fontSize:16}}>{cat.ic}</span>
+                <span className="cat-nm">{cat.n}</span>
+                <span className={`cat-bdg${catDone===cat.items.length&&cat.items.length>0?' done':''}`}>{catDone}/{cat.items.length}</span>
+              </div>
+              <span className={`cat-chev${coll?'':' open'}`}>▼</span>
+            </div>
+            {!coll && (
+              <div className="cat-body">
+                {cat.items.map((item,j)=>{
+                  const key = `${famIdx}-${startIdx+j}`;
+                  return (
+                    <div key={j} className="cl-item">
+                      <div className={`cl-chk${checked[key]?' on':''}`} onClick={()=>setChecked(c=>({...c,[key]:!c[key]}))}>
+                        {checked[key] && <span style={{fontSize:13,color:'#0d0f14',fontWeight:700}}>✓</span>}
+                      </div>
+                      <span className={`cl-txt${checked[key]?' done':''}`}>{item}</span>
+                    </div>
+                  );
+                })}
+                <div className="cl-add-row">
+                  <input className="cl-inp" placeholder="新增項目..."/>
+                  <button className="cl-add-btn">新增</button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Info Page ──
+function InfoPage() {
+  const [area, setArea] = useState('bkk');
+  const [open, setOpen] = useState({tdac:true,'bkk-s':true});
+  const tog = id => setOpen(o=>({...o,[id]:!o[id]}));
+  const [twTime, setTwTime] = useState('');
+  const [thTime, setThTime] = useState('');
+  useEffect(()=>{
+    const tick=()=>{
+      const now=new Date();
+      setTwTime(now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',hour12:false}));
+      const thai=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Bangkok'}));
+      setThTime(thai.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',hour12:false}));
+    };
+    tick(); const t=setInterval(tick,1000); return ()=>clearInterval(t);
+  },[]);
+  return (
+    <div>
+      <div className="hdr"><div className="hdr-sub">旅遊資訊</div><div className="hdr-title">泰國 2026</div></div>
+      <div style={{padding:'12px 0 20px'}}>
+        <div className="sec-lbl" style={{padding:'0 16px',marginBottom:10}}>緊急聯絡</div>
+        <div className="emer-card">
+          <div className="emer-hdr"><span style={{fontSize:20}}>🚨</span><div><div className="emer-ht">緊急電話</div><div style={{fontSize:11,color:'var(--t2)',marginTop:2}}>點擊號碼直接撥打</div></div></div>
+          {[['🚔','泰國警察','191'],['🚑','緊急救護','1669'],['🏛️','觀光警察（英語）','1155'],['🇹🇼','駐泰台北辦事處','+66-2-119-3555'],['🆘','外交部急難救助','+800-0885-0885']].map(([ic,name,num])=>(
+            <div key={num} className="emer-it">
+              <div className="emer-il"><span style={{fontSize:16}}>{ic}</span>{name}</div>
+              <div style={{display:'flex',alignItems:'center',gap:8}}><span className="emer-num">{num}</span><span className="call-bdg">撥打</span></div>
+            </div>
+          ))}
+        </div>
+        <div className="sec-lbl" style={{padding:'8px 16px',marginBottom:8}}>航班資訊</div>
+        <div className="fl-card">
+          <div className="fl-hdr"><span className="fl-dir">去程</span><span className="fl-num">JX741</span></div>
+          <div className="fl-route">
+            <div className="fl-city"><div className="fl-code">TPE</div><div className="fl-cname">台北桃園</div></div>
+            <div className="fl-mid"><div className="fl-line"><div className="fl-dot"/><div className="fl-dash"/><span style={{fontSize:14}}>✈</span><div className="fl-dash"/><div className="fl-dot"/></div><div className="fl-dur">約3小時</div></div>
+            <div className="fl-city r"><div className="fl-code">BKK</div><div className="fl-cname">曼谷素萬那普</div></div>
+          </div>
+          <div className="fl-times">
+            <div><div className="fl-t">09:00</div><div className="fl-d">2026年5月16日（六）</div></div>
+            <div style={{textAlign:'right'}}><div className="fl-t">12:00</div><div className="fl-d">2026年5月16日（六）</div></div>
+          </div>
+        </div>
+        <div className="fl-card">
+          <div className="fl-hdr"><span className="fl-dir">回程（全員）</span><span className="fl-num">JX742</span></div>
+          <div className="fl-route">
+            <div className="fl-city"><div className="fl-code">BKK</div><div className="fl-cname">曼谷素萬那普</div></div>
+            <div className="fl-mid"><div className="fl-line"><div className="fl-dot"/><div className="fl-dash"/><span style={{fontSize:14}}>✈</span><div className="fl-dash"/><div className="fl-dot"/></div><div className="fl-dur">約3小時</div></div>
+            <div className="fl-city r"><div className="fl-code">TPE</div><div className="fl-cname">台北桃園</div></div>
+          </div>
+          <div className="fl-times">
+            <div><div className="fl-t">13:10</div><div className="fl-d">2026年5月24日（日）</div></div>
+            <div style={{textAlign:'right'}}><div className="fl-t">18:00</div><div className="fl-d">2026年5月24日（日）</div></div>
+          </div>
+          <div className="fl-note">⚠️ 辰一家（泰辰、NiNi）於 5/22 提早搭乘同班次返台</div>
+        </div>
+        <div className="sec-lbl" style={{padding:'8px 16px',marginBottom:8}}>時差資訊</div>
+        <div className="tz-card">
+          <div className="tz-row">
+            <div className="tz-bl"><div className="tz-co">🇹🇼 台灣</div><div className="tz-t">{twTime}</div><div className="tz-z">UTC+8</div></div>
+            <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:4,padding:'0 12px'}}><span style={{fontSize:18,color:'var(--tm)'}}>⇄</span><span className="tz-diff">慢 1 小時</span></div>
+            <div className="tz-bl"><div className="tz-co">🇹🇭 泰國</div><div className="tz-t">{thTime}</div><div className="tz-z">UTC+7</div></div>
+          </div>
+          <div style={{marginTop:10,paddingTop:10,borderTop:'1px solid var(--bd)',fontSize:12,color:'var(--t2)'}}>泰國比台灣慢 1 小時，手機入境後會自動切換時區</div>
+        </div>
+        <div className="sec-lbl" style={{padding:'8px 16px',marginBottom:8}}>入境資訊</div>
+        <div className="info-card">
+          <div className="info-ch" onClick={()=>tog('tdac')}>
+            <div className="info-ct"><div className="info-ci" style={{background:'rgba(79,142,247,.15)'}}>🛂</div><div><div className="info-ctxt">TDAC 電子入境卡</div><div className="info-cs">必辦 · 出發前72小時內完成</div></div></div>
+            <span style={{fontSize:12,color:'var(--tm)',transform:open.tdac?'rotate(180deg)':'none',transition:'transform .2s'}}>▼</span>
+          </div>
+          {open.tdac && <div className="info-body">
+            <div className="info-row"><span className="info-ri">🌐</span><div><div className="info-rtt">官方網址</div><div className="info-rd">https://tdac.immigration.go.th（免費申請）</div><span className="tg-imp">必辦</span></div></div>
+            <div className="info-row"><span className="info-ri">⏰</span><div><div className="info-rtt">申請時間</div><div className="info-rd">出發前 72 小時內，建議 5/13–5/16 早上完成</div></div></div>
+            <div className="info-row"><span className="info-ri">📱</span><div><div className="info-rtt">入境時</div><div className="info-rd">出示 QR Code ＋ 護照給海關掃描，截圖存手機備用</div><span className="tg-tip">小提醒</span></div></div>
+          </div>}
+        </div>
+        <div className="sec-lbl" style={{padding:'8px 16px',marginBottom:8}}>景點資訊</div>
+        <div className="area-tabs">
+          <div className={`atab${area==='bkk'?' active':''}`} onClick={()=>setArea('bkk')}>🏙️ 曼谷</div>
+          <div className={`atab${area==='samet'?' active':''}`} onClick={()=>setArea('samet')}>🏝️ 沙美島</div>
+        </div>
+        {area==='bkk' && <>
+          <div className="info-card">
+            <div className="info-ch" onClick={()=>tog('bkk-s')}>
+              <div className="info-ct"><div className="info-ci" style={{background:'rgba(196,125,43,.15)'}}>🎡</div><div><div className="info-ctxt">曼谷景點</div><div className="info-cs">寺廟・夜市・市集</div></div></div>
+              <span style={{fontSize:12,color:'var(--tm)',transform:open['bkk-s']?'rotate(180deg)':'none',transition:'transform .2s'}}>▼</span>
+            </div>
+            {open['bkk-s'] && <div className="info-body">
+              {[['🕌','洽圖洽假日市集','週末限定，超過 15,000 個攤位','Day 2','tip'],['🛥️','ICON SIAM','河濱高級購物中心，有水上市場，建興酒家在此','Day 6','tip'],['🌙','Asiatique 碼頭夜市','昭披耶河畔夜市，有摩天輪','Day 7','tip']].map(([ic,name,desc,tag,tgcls])=>(
+                <div key={name} className="info-row"><span className="info-ri">{ic}</span><div><div className="info-rtt">{name}</div><div className="info-rd">{desc}</div><span className={`tg-${tgcls}`}>{tag}</span></div></div>
+              ))}
+            </div>}
+          </div>
+        </>}
+        {area==='samet' && <>
+          <div className="info-card">
+            <div className="info-ch" onClick={()=>tog('samet-s')}>
+              <div className="info-ct"><div className="info-ci" style={{background:'rgba(45,125,168,.15)'}}>🏖️</div><div><div className="info-ctxt">沙美島景點</div><div className="info-cs">海灘・水上活動</div></div></div>
+              <span style={{fontSize:12,color:'var(--tm)',transform:open['samet-s']?'rotate(180deg)':'none',transition:'transform .2s'}}>▼</span>
+            </div>
+            {open['samet-s'] && <div className="info-body">
+              <div className="info-row"><span className="info-ri">🏄</span><div><div className="info-rtt">水上活動</div><div className="info-rd">浮潛、香蕉船、獨木舟，約 300–800 泰銖</div><span className="tg-tip">Day 5 B路線</span></div></div>
+              <div className="info-row"><span className="info-ri">💵</span><div><div className="info-rtt">以現金為主</div><div className="info-rd">島上多數店家只收現金，建議從曼谷帶足夠泰銖</div><span className="tg-imp">注意</span></div></div>
+              <div className="info-row"><span className="info-ri">🌞</span><div><div className="info-rtt">防曬必備</div><div className="info-rd">海灘日曬強烈，每 2 小時補擦，小孩要特別注意</div></div></div>
+            </div>}
+          </div>
+        </>}
+      </div>
+    </div>
+  );
+}
+
+// ── Main App ──
+function App() {
+  const [page, setPage] = useState('home');
+  const pages = ['home','itinerary','accounting','checklist','info'];
+  const navItems = [['🏠','首頁','home'],['🗓️','行程','itinerary'],['💰','記帳','accounting'],['✅','清單','checklist'],['ℹ️','資訊','info']];
+
+  return (
+    <>
+      <style>{css}</style>
+      <div className="app">
+        <div className="pages">
+          <div className={`page${page==='home'?' active':''}`}><HomePage onNav={setPage}/></div>
+          <div className={`page${page==='itinerary'?' active':''}`}><ItineraryPage/></div>
+          <div className={`page${page==='accounting'?' active':''}`}><AccountingPage/></div>
+          <div className={`page${page==='checklist'?' active':''}`}><ChecklistPage/></div>
+          <div className={`page${page==='info'?' active':''}`}><InfoPage/></div>
+        </div>
+        <div className="nav">
+          {navItems.map(([icon,label,p])=>(
+            <div key={p} className={`ni${page===p?' active':''}`} onClick={()=>setPage(p)}>
+              <span className="ni-icon">{icon}</span>
+              <span className="ni-lbl">{label}</span>
+              {page===p && <div className="ni-dot"/>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+
+// ── Render ──
+ReactDOM.render(React.createElement(App), document.getElementById('root'));
+// ── Firebase ──
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey:"AIzaSyAMCpS9GNvd4Dudw3lq5m0xbzMrItgiiQ4",
+  authDomain:"travelplan-28643.firebaseapp.com",
+  databaseURL:"https://travelplan-28643-default-rtdb.firebaseio.com",
+  projectId:"travelplan-28643",
+  storageBucket:"travelplan-28643.firebasestorage.app",
+  messagingSenderId:"154178170425",
+  appId:"1:154178170425:web:1c7c2e2a7e3884b99f67e8"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp);
+window._fb = { db, ref, set, onValue };
+console.log('Firebase connected ✅');
 </script>
 </body>
 </html>
