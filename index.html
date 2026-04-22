@@ -231,7 +231,21 @@ html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif
         <div style="padding:0 16px" id="expList"></div>
         <div id="historySection"></div>
       </div>
-      <div id="acc-personal" style="display:none"><div style="text-align:center;padding:40px 24px;color:var(--tm);font-size:13px"><div style="font-size:36px;margin-bottom:10px">👤</div>上傳正式版後可查看個人帳目</div></div>
+      <div id="acc-personal" style="display:none">
+        <div style="display:flex;margin:0 16px 10px;background:var(--bgc);border-radius:10px;padding:3px;gap:3px;border:1px solid var(--bd)">
+          <div id="pt-ind" onclick="switchPersonalTab('ind')" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:var(--bg2);color:var(--t1)">個人明細</div>
+          <div id="pt-fam" onclick="switchPersonalTab('fam')" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--tm)">家庭匯總</div>
+        </div>
+        <div id="p-individual">
+          <div style="overflow-x:auto;padding:0 16px 12px;scrollbar-width:none"><div style="display:flex;gap:10px;width:max-content" id="memRow"></div></div>
+          <div id="pSummary" style="margin:0 16px 14px;background:var(--bgc);border-radius:var(--r);padding:14px;border:1px solid var(--bd)"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:0 18px 8px"><span style="font-size:11px;font-weight:600;color:var(--tm);letter-spacing:.08em;text-transform:uppercase">費用明細</span></div>
+          <div style="padding:0 16px" id="pList"></div>
+        </div>
+        <div id="p-family" style="display:none">
+          <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px" id="famList"></div>
+        </div>
+      </div>
     </div>
 
     <!-- CHECKLIST -->
@@ -715,6 +729,163 @@ window.toggleInfo=function(id){const body=document.getElementById('body-'+id),ch
 window.switchArea=function(area){document.getElementById('area-bkk').style.display=area==='bkk'?'':'none';document.getElementById('area-samet').style.display=area==='samet'?'':'none';document.getElementById('atab-bkk').className='atab'+(area==='bkk'?' active':'');document.getElementById('atab-samet').className='atab'+(area==='samet'?' active':'');};
 window.openModal=function(){document.getElementById('modalOv').classList.add('open');};
 window.closeModal=function(){document.getElementById('modalOv').classList.remove('open');};
+
+// ══ PERSONAL TAB ══
+let selMem=0;
+let personalTab='ind';
+
+window.switchPersonalTab=function(t){
+  personalTab=t;
+  const ind=document.getElementById('p-individual');
+  const fam=document.getElementById('p-family');
+  const tInd=document.getElementById('pt-ind');
+  const tFam=document.getElementById('pt-fam');
+  const activeS='flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:var(--bg2);color:var(--t1)';
+  const inactS='flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--tm)';
+  if(t==='ind'){ind.style.display='';fam.style.display='none';tInd.style.cssText=activeS;tFam.style.cssText=inactS;renderPersonal();}
+  else{ind.style.display='none';fam.style.display='';tInd.style.cssText=inactS;tFam.style.cssText=activeS;renderFamSum();}
+};
+
+function renderMemRow(){
+  const el=document.getElementById('memRow');if(!el)return;
+  el.innerHTML=ALL_MEMBERS.map((m,i)=>{
+    const mc=getMC(m);
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="selMemFn(${i})">
+      <div style="width:44px;height:44px;border-radius:50%;background:${mc.bg};color:${mc.color};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;border:2px solid ${i===selMem?'var(--gold)':' transparent'}">
+        ${m[0]}
+      </div>
+      <span style="font-size:10px;color:${i===selMem?'var(--gold)':' var(--t2)'};white-space:nowrap">${m}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderPersonal(){
+  renderMemRow();
+  const name=ALL_MEMBERS[selMem];
+  const mc=getMC(name);
+  // find all expenses this person is involved in
+  const myExps=EXPENSES.filter(e=>{
+    const mems=getMem(e.split);
+    return mems.includes(name)||e.payer===name;
+  });
+  // calc total this person owes (share) and paid
+  let totalOwed=0,totalPaid=0;
+  myExps.forEach(e=>{
+    const mems=getMem(e.split);
+    if(mems.includes(name)) totalOwed+=perHead(e.amount,e.currency,e.split);
+    if(e.payer===name) totalPaid+=toTHB(e.amount,e.currency);
+  });
+  const net=totalPaid-totalOwed;
+  const pSum=document.getElementById('pSummary');
+  if(pSum){
+    pSum.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="font-size:16px;font-weight:700;color:var(--t1)">${name}</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px">共參與 ${myExps.length} 筆費用</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:${net>=0?'var(--grn)':' var(--red)'}">${net>=0?'+':''}฿ ${net.toLocaleString()}</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px">${net>=0?'應收回':'應付出'}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1;background:var(--bgi);border-radius:10px;padding:10px;border:1px solid var(--bd);text-align:center">
+          <div style="font-size:10px;color:var(--tm);margin-bottom:4px">代墊金額</div>
+          <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--t1)">฿ ${totalPaid.toLocaleString()}</div>
+        </div>
+        <div style="flex:1;background:var(--bgi);border-radius:10px;padding:10px;border:1px solid var(--bd);text-align:center">
+          <div style="font-size:10px;color:var(--tm);margin-bottom:4px">應分攤金額</div>
+          <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--t1)">฿ ${totalOwed.toLocaleString()}</div>
+        </div>
+      </div>`;
+  }
+  const pList=document.getElementById('pList');
+  if(pList){
+    if(!myExps.length){pList.innerHTML='<div style="text-align:center;padding:24px;color:var(--tm);font-size:13px">沒有相關費用記錄</div>';return;}
+    pList.innerHTML=myExps.map(e=>{
+      const m=CAT_META[e.cat]||CAT_META.other;
+      const ph=perHead(e.amount,e.currency,e.split);
+      const isPayer=e.payer===name;
+      const sym=e.currency==='THB'?'฿':'NT$';
+      return `<div class="exp-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;flex-wrap:wrap">
+              <span class="exp-tag ${m.cls}">${m.i} ${m.l}</span>
+              ${e.date?`<span style="font-size:10px;color:var(--tm)">${e.date}</span>`:''}
+              ${isPayer?'<span style="font-size:10px;padding:2px 6px;border-radius:20px;background:rgba(76,175,130,.12);color:var(--grn);border:1px solid rgba(76,175,130,.25)">你付款</span>':''}
+            </div>
+            <div style="font-size:14px;font-weight:600;color:var(--t1)">${esc(e.title)}</div>
+            <div style="font-size:12px;color:var(--t2);margin-top:3px">分攤：${splitLbl(e.split)}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--t1)">฿ ${ph.toLocaleString()}</div>
+            <div style="font-size:11px;color:var(--tm);margin-top:2px">我的份額</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+window.selMemFn=function(i){selMem=i;renderPersonal();};
+
+function renderFamSum(){
+  const FAM_DATA=[
+    {name:'球一家',mem:['球','哭A','COODY','小葵'],color:'#4caf82'},
+    {name:'EVA一家',mem:['EVA','龍哥','樂樂','菲菲'],color:'#4f8ef7'},
+    {name:'辰一家',mem:['泰辰','NiNi'],color:'#f5c842'},
+    {name:'阿逼',mem:['阿逼'],color:'#ffa657'},
+    {name:'逼弟',mem:['逼弟'],color:'#c49ef5'},
+    {name:'國民堂哥',mem:['國民堂哥'],color:'#56d4d4'},
+  ];
+  const el=document.getElementById('famList');if(!el)return;
+  el.innerHTML=FAM_DATA.map(f=>{
+    let famTotal=0,famPaid=0;
+    EXPENSES.forEach(e=>{
+      const mems=getMem(e.split);
+      f.mem.forEach(mn=>{
+        if(mems.includes(mn)) famTotal+=perHead(e.amount,e.currency,e.split);
+        if(e.payer===mn) famPaid+=toTHB(e.amount,e.currency);
+      });
+    });
+    const net=famPaid-famTotal;
+    return `<div style="background:var(--bgc);border-radius:var(--r);padding:14px;border:1px solid var(--bd)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-size:15px;font-weight:600;color:${f.color}">${f.name}</div>
+          <div style="font-size:12px;color:var(--t2);margin-top:3px">${f.mem.join('、')}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:${net>=0?'var(--grn)':' var(--red)'}">${net>=0?'+':''}฿ ${net.toLocaleString()}</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px">${net>=0?'應收回':'應付出'}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--bd)">
+        <div style="flex:1;text-align:center">
+          <div style="font-size:10px;color:var(--tm);margin-bottom:3px">代墊</div>
+          <div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--t1)">฿ ${famPaid.toLocaleString()}</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="font-size:10px;color:var(--tm);margin-bottom:3px">應分攤</div>
+          <div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--t1)">฿ ${famTotal.toLocaleString()}</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="font-size:10px;color:var(--tm);margin-bottom:3px">人均</div>
+          <div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--t1)">฿ ${f.mem.length>0?Math.round(famTotal/f.mem.length).toLocaleString():0}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Patch switchAccTab to trigger personal render
+const _origSwitchAccTab = window.switchAccTab;
+window.switchAccTab=function(t){
+  _origSwitchAccTab(t);
+  if(t==='personal'){renderPersonal();}
+};
 </script>
 </body>
 </html>
