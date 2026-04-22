@@ -201,7 +201,7 @@ body { overscroll-behavior: none; position: fixed; width: 100%; }
         </div>
         <div style="padding:0 16px 8px" class="sec-lbl">匯率換算</div>
         <div class="fx-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px 10px"><span style="font-size:14px;font-weight:600;color:var(--t1)">快速換算</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px 10px"><span style="font-size:14px;font-weight:600;color:var(--t1)">快速換算</span><span onclick="openFxModal()" style="font-size:12px;color:var(--acc);cursor:pointer">自訂匯率 ✎</span></div>
           <div style="display:flex;align-items:center;gap:10px;padding:0 16px 12px"><div style="flex:1;background:var(--bgi);border-radius:10px;border:1px solid var(--bd);display:flex;align-items:center;padding:8px 12px;gap:6px"><span style="font-size:14px;color:var(--tm)">฿</span><input class="fx-inp" type="number" value="1000" id="thb-inp" inputmode="decimal" oninput="updateFX()"/></div><span style="font-size:13px;color:var(--t2)">泰銖</span></div>
           <div style="height:1px;background:var(--bd);margin:0 16px"></div>
           <div style="padding:10px 16px 14px;display:flex;flex-direction:column;gap:8px">
@@ -480,7 +480,6 @@ function tick(){
 }
 setInterval(tick,1000);tick();
 
-const FX={twd:0.895,usd:0.0278,jpy:4.19,krw:37.2};
 window.updateFX=function(){const thb=parseFloat(document.getElementById('thb-inp').value)||0;document.getElementById('twd-v').textContent='NT$ '+Math.round(thb*FX.twd).toLocaleString();document.getElementById('usd-v').textContent='$ '+(thb*FX.usd).toFixed(2);document.getElementById('jpy-v').textContent='¥ '+Math.round(thb*FX.jpy).toLocaleString();document.getElementById('krw-v').textContent='₩ '+Math.round(thb*FX.krw).toLocaleString();};
 
 function renderAll(){renderItinerary();renderAccounting();renderCL();}
@@ -736,6 +735,39 @@ window.resetCL=function(){const f=FAMS_CL[activeFam];CATS_CL.forEach(c=>CL_STATE
 
 window.toggleInfo=function(id){const body=document.getElementById('body-'+id),chev=document.getElementById('chev-'+id);if(!body)return;body.classList.toggle('open');if(chev)chev.style.transform=body.classList.contains('open')?'rotate(180deg)':'none';};
 window.switchArea=function(area){document.getElementById('area-bkk').style.display=area==='bkk'?'':'none';document.getElementById('area-samet').style.display=area==='samet'?'':'none';document.getElementById('atab-bkk').className='atab'+(area==='bkk'?' active':'');document.getElementById('atab-samet').className='atab'+(area==='samet'?' active':'');};
+// Custom FX rate modal
+let FX={twd:0.895,usd:0.0278,jpy:4.19,krw:37.2};
+window.openFxModal=function(){
+  document.getElementById('modalBody').innerHTML=`
+    <div style="font-size:17px;font-weight:700;color:var(--t1);margin-bottom:6px">自訂換匯匯率</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:16px">輸入你在當地換匯的匯率，之後所有換算都用這個匯率</div>
+    <div class="form-group"><label class="form-label">🇹🇼 1 泰銖 = ? 台幣 (TWD)</label><input class="form-input" type="number" id="fx-twd" value="${FX.twd}" step="0.001" inputmode="decimal"/></div>
+    <div class="form-group"><label class="form-label">🇺🇸 1 泰銖 = ? 美金 (USD)</label><input class="form-input" type="number" id="fx-usd" value="${FX.usd}" step="0.0001" inputmode="decimal"/></div>
+    <div class="form-group"><label class="form-label">🇯🇵 1 泰銖 = ? 日圓 (JPY)</label><input class="form-input" type="number" id="fx-jpy" value="${FX.jpy}" step="0.01" inputmode="decimal"/></div>
+    <div class="form-group"><label class="form-label">🇰🇷 1 泰銖 = ? 韓圜 (KRW)</label><input class="form-input" type="number" id="fx-krw" value="${FX.krw}" step="0.1" inputmode="decimal"/></div>
+    <div style="font-size:11px;color:var(--gold);background:rgba(245,200,66,.08);padding:8px 12px;border-radius:8px;border:1px solid rgba(245,200,66,.2);margin-bottom:16px">💡 例如在機場換匯 1 泰銖換到 0.87 台幣，就填 0.87</div>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-save" onclick="saveFxRates()">儲存匯率</button>
+    </div>`;
+  openModal();
+};
+window.saveFxRates=function(){
+  const twd=parseFloat(document.getElementById('fx-twd').value);
+  const usd=parseFloat(document.getElementById('fx-usd').value);
+  const jpy=parseFloat(document.getElementById('fx-jpy').value);
+  const krw=parseFloat(document.getElementById('fx-krw').value);
+  if(!isNaN(twd))FX.twd=twd;
+  if(!isNaN(usd))FX.usd=usd;
+  if(!isNaN(jpy))FX.jpy=jpy;
+  if(!isNaN(krw))FX.krw=krw;
+  // Update fx display
+  document.getElementById('twd-v').textContent='NT$ '+Math.round((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.twd).toLocaleString();
+  document.getElementById('usd-v').textContent='$ '+((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.usd).toFixed(2);
+  document.getElementById('jpy-v').textContent='¥ '+Math.round((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.jpy).toLocaleString();
+  document.getElementById('krw-v').textContent='₩ '+Math.round((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.krw).toLocaleString();
+  closeModal();
+};
 window.openModal=function(){document.getElementById('modalOv').classList.add('open');};
 window.closeModal=function(){document.getElementById('modalOv').classList.remove('open');};
 
@@ -867,18 +899,18 @@ function renderFamSum(){
           <div style="font-size:12px;color:var(--t2);margin-top:3px">${f.mem.join('、')}</div>
         </div>
         <div style="text-align:right">
-          <div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:${net>=0?'var(--grn)':' var(--red)'}">${net>=0?'+':''}฿ ${net.toLocaleString()}</div>
-          <div style="font-size:11px;color:var(--t2);margin-top:2px">${net>=0?'應收回':'應付出'}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--t1)">฿ ${famTotal.toLocaleString()}</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px">本趟花費</div>
         </div>
       </div>
       <div style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--bd)">
         <div style="flex:1;text-align:center">
-          <div style="font-size:10px;color:var(--tm);margin-bottom:3px">代墊</div>
-          <div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--t1)">฿ ${famPaid.toLocaleString()}</div>
-        </div>
-        <div style="flex:1;text-align:center">
           <div style="font-size:10px;color:var(--tm);margin-bottom:3px">應分攤</div>
           <div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--t1)">฿ ${famTotal.toLocaleString()}</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="font-size:10px;color:var(--tm);margin-bottom:3px">NT$ 換算</div>
+          <div style="font-family:'DM Mono',monospace;font-size:14px;color:var(--t1)">NT$ ${Math.round(famTotal*THB_RATE).toLocaleString()}</div>
         </div>
         <div style="flex:1;text-align:center">
           <div style="font-size:10px;color:var(--tm);margin-bottom:3px">人均</div>
