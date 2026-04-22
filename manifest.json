@@ -1,0 +1,22 @@
+{
+  "name": "泰國 2026",
+  "short_name": "泰國2026",
+  "description": "泰國旅遊計畫 2026",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0f14",
+  "theme_color": "#0d0f14",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f1f9-1f1ed.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/144x144/1f1f9-1f1ed.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ]
+}
