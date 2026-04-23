@@ -2,9 +2,9 @@
 <!-- 泰國 2026 旅遊 App - Firebase Realtime Database 版本 -->
 <html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="泰國2026">
 <meta name="theme-color" content="#0d0f14">
 <title>🇹🇭 泰國 2026</title>
@@ -13,7 +13,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif;height:100%}
 :root{--bg:#0d0f14;--bg2:#141720;--bgc:#1a1e2a;--bgi:#0f1219;--bd:#2a2f3e;--bdl:#333a4d;--acc:#4f8ef7;--accd:rgba(79,142,247,.15);--gold:#f5c842;--grn:#4caf82;--red:#e05252;--t1:#e8ecf5;--t2:#8891a8;--tm:#5a6278;--r:14px;--rs:8px}
-.app{max-width:480px;margin:0 auto;height:100vh;height:100svh;display:flex;flex-direction:column;background:var(--bg);position:relative}
+.app{max-width:480px;margin:0 auto;height:100vh;height:100svh;display:flex;flex-direction:column;background:var(--bg);position:relative;padding-top:env(safe-area-inset-top)}
 .pages{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 .pages::-webkit-scrollbar{display:none}
 .page{display:none}.page.active{display:block}
@@ -21,7 +21,7 @@ html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif
 .ni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:1;padding:2px 0}
 .ni-icon{font-size:22px;line-height:1}.ni-lbl{font-size:10px;color:var(--tm)}
 .ni.active .ni-lbl{color:var(--acc)}.ni-dot{width:4px;height:4px;background:var(--acc);border-radius:50%;margin-top:1px}
-.sync-dot{font-size:11px;font-weight:600;color:var(--tm);position:fixed;top:14px;right:14px;z-index:300;background:var(--bgc);border:1px solid var(--bd);border-radius:20px;padding:4px 10px;pointer-events:none}
+.sync-dot{font-size:11px;font-weight:600;color:var(--tm);position:fixed;top:max(14px,calc(env(safe-area-inset-top) + 6px));right:14px;z-index:300;background:var(--bgc);border:1px solid var(--bd);border-radius:20px;padding:4px 10px;pointer-events:none}
 .sync-dot.online{color:var(--grn)}.sync-dot.saving{color:var(--acc)}
 .hdr{background:var(--bg2);border-bottom:1px solid var(--bd);padding:16px 20px;position:sticky;top:0;z-index:10}
 .hdr-sub{font-size:11px;font-weight:600;color:var(--tm);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
@@ -132,7 +132,7 @@ html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif
 .form-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238891a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
 .form-select option{background:var(--bgc)}
 .form-textarea{min-height:80px;resize:vertical;line-height:1.6}
-.btn-row{display:flex;gap:10px;margin-top:20px;position:sticky;bottom:0;background:var(--bg2);padding:12px 0 calc(20px + env(safe-area-inset-bottom));z-index:5}
+.btn-row{display:flex;gap:10px;margin-top:20px;position:sticky;bottom:0;background:var(--bg2);padding:12px 0 max(20px,env(safe-area-inset-bottom));z-index:5}
 .btn-cancel{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:var(--rs);color:var(--t2);font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:600;padding:14px;cursor:pointer}
 .btn-save{flex:2;background:var(--acc);border:none;border-radius:var(--rs);color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:700;padding:14px;cursor:pointer}
 .btn-save.green{background:var(--grn)}
@@ -143,7 +143,12 @@ html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif
 .cur-toggle{display:flex;background:var(--bgc);border-radius:var(--rs);border:1px solid var(--bd);overflow:hidden;flex-shrink:0}
 .cur-btn{padding:11px 14px;font-size:12px;font-weight:600;cursor:pointer;color:var(--t2);font-family:'Noto Sans TC',sans-serif;border:none;background:transparent}
 .cur-btn.active{background:var(--acc);color:#fff}
-.photo-empty{background:var(--bgc);border:1px dashed var(--bd);border-radius:var(--r);padding:28px 20px;text-align:center}
+.cat-pubfund{background:rgba(245,200,66,.15);color:#f5c842}
+.pubfund-income{color:var(--grn)}
+.pubfund-expense{color:var(--red)}
+.pubfund-balance-pos{color:var(--grn)}
+.pubfund-balance-neg{color:var(--red)}
+
 .sec-lbl{font-size:11px;font-weight:600;color:var(--tm);letter-spacing:.08em;text-transform:uppercase}
 .time-picker{display:flex;align-items:center;gap:12px;background:var(--bgi);border:1px solid var(--bd);border-radius:var(--rs);padding:6px 16px;justify-content:center}
 .time-picker-sep{font-family:'DM Mono',monospace;font-size:28px;font-weight:500;color:var(--acc);line-height:1;margin-bottom:2px}
@@ -270,10 +275,11 @@ html, body { overscroll-behavior: none; }
 
     <!-- ACCOUNTING -->
     <div class="page" id="page-accounting">
-      <div class="hdr"><div class="hdr-row"><div><div class="hdr-sub">記帳</div><div class="hdr-title">旅遊支出</div></div><button onclick="openAccModal()" style="background:var(--grn);color:#0d0f14;border:none;border-radius:var(--rs);font-family:&#39;Noto Sans TC&#39;,sans-serif;font-size:13px;font-weight:700;padding:8px 16px;cursor:pointer">＋ 新增</button></div></div>
+      <div class="hdr"><div class="hdr-row"><div><div class="hdr-sub">記帳</div><div class="hdr-title">旅遊支出</div></div><button onclick="openAccModal()" style="background:var(--grn);color:#0d0f14;border:none;border-radius:var(--rs);font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:700;padding:8px 16px;cursor:pointer;align-self:center;flex-shrink:0">＋ 新增</button></div></div>
       <div style="display:flex;margin:12px 16px;background:var(--bgc);border-radius:10px;padding:3px;gap:3px;border:1px solid var(--bd)">
-        <div id="acc-tab-g" onclick="switchAccTab(&#39;group&#39;)" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:var(--bg2);color:var(--t1)">團體分帳</div>
-        <div id="acc-tab-p" onclick="switchAccTab(&#39;personal&#39;)" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--tm)">個人帳目</div>
+        <div id="acc-tab-g" onclick="switchAccTab('group')" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:var(--bg2);color:var(--t1)">團體分帳</div>
+        <div id="acc-tab-pub" onclick="switchAccTab('pubfund')" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--tm)">💰 公費</div>
+        <div id="acc-tab-p" onclick="switchAccTab('personal')" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--tm)">個人帳目</div>
       </div>
       <div id="acc-group">
         <div class="sum-row"><div class="sum-c"><div style="font-size:10px;color:var(--tm);margin-bottom:5px">總花費</div><div id="acc-total" style="font-family:&#39;DM Mono&#39;,monospace;font-size:15px;font-weight:500;color:var(--t1)">฿ 6,500</div><div id="acc-total-s" style="font-size:10px;color:var(--tm);margin-top:2px">NT$ 5,818</div></div><div class="sum-c"><div style="font-size:10px;color:var(--tm);margin-bottom:5px">筆數</div><div id="acc-count" style="font-family:&#39;DM Mono&#39;,monospace;font-size:16px;font-weight:500;color:var(--t1)">1</div><div style="font-size:10px;color:var(--tm);margin-top:2px">筆費用</div></div><div class="sum-c"><div style="font-size:10px;color:var(--tm);margin-bottom:5px">待結算</div><div id="acc-pending" style="font-family:&#39;DM Mono&#39;,monospace;font-size:16px;font-weight:500;color:var(--gold)">0</div><div style="font-size:10px;color:var(--tm);margin-top:2px">筆未核銷</div></div></div>
@@ -282,7 +288,36 @@ html, body { overscroll-behavior: none; }
         <div style="padding:0 16px" id="expList"><div style="text-align:center;padding:40px 20px;color:var(--tm);font-size:13px"><div style="font-size:36px;margin-bottom:10px">💳</div>還沒有費用記錄<br>點右上角 ＋ 新增第一筆</div></div>
         <div id="historySection"><div style="display:flex;justify-content:space-between;align-items:center;padding:0 18px 8px;margin-top:4px"><span style="font-size:11px;font-weight:600;color:var(--tm);letter-spacing:.08em;text-transform:uppercase">歷史記錄</span><span onclick="toggleHistory()" style="font-size:12px;color:var(--acc);cursor:pointer">展開 (1筆)</span></div></div>
       </div>
-      <div id="acc-personal" style="display:none">
+      <div id="acc-pubfund" style="display:none">
+        <!-- 公費餘額總覽 -->
+        <div style="margin:0 16px 12px;background:var(--bgc);border:1px solid var(--bd);border-radius:var(--r);padding:16px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--grn))"></div>
+          <div style="font-size:11px;font-weight:600;color:var(--tm);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">💰 公費帳戶</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px">
+            <div style="background:var(--bgi);border-radius:10px;padding:10px 6px;text-align:center;border:1px solid var(--bd)">
+              <div style="font-size:10px;color:var(--tm);margin-bottom:4px">總收入</div>
+              <div id="pub-income" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--grn)">฿ 0</div>
+            </div>
+            <div style="background:var(--bgi);border-radius:10px;padding:10px 6px;text-align:center;border:1px solid var(--bd)">
+              <div style="font-size:10px;color:var(--tm);margin-bottom:4px">總支出</div>
+              <div id="pub-expense" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--red)">฿ 0</div>
+            </div>
+            <div style="background:var(--bgi);border-radius:10px;padding:10px 6px;text-align:center;border:1px solid var(--bd)">
+              <div style="font-size:10px;color:var(--tm);margin-bottom:4px">結餘</div>
+              <div id="pub-balance" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--gold)">฿ 0</div>
+            </div>
+          </div>
+          <div id="pub-balance-ntd" style="font-size:10px;color:var(--tm);text-align:center;margin-top:6px"></div>
+        </div>
+        <!-- 新增公費按鈕 -->
+        <div style="display:flex;gap:8px;margin:0 16px 12px">
+          <button onclick="openPubModal('income')" style="flex:1;background:rgba(76,175,130,.15);border:1px solid rgba(76,175,130,.4);border-radius:var(--rs);color:var(--grn);font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:700;padding:10px;cursor:pointer">＋ 收入</button>
+          <button onclick="openPubModal('expense')" style="flex:1;background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.35);border-radius:var(--rs);color:var(--red);font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:700;padding:10px;cursor:pointer">－ 支出</button>
+        </div>
+        <!-- 收支記錄 -->
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0 18px 8px"><span style="font-size:11px;font-weight:600;color:var(--tm);letter-spacing:.08em;text-transform:uppercase">收支記錄</span></div>
+        <div style="padding:0 16px" id="pubList"><div style="text-align:center;padding:40px 20px;color:var(--tm);font-size:13px"><div style="font-size:36px;margin-bottom:10px">💰</div>還沒有公費記錄<br>點上方「＋ 收入」或「－ 支出」新增</div></div>
+      </div>
         <div style="display:flex;margin:0 16px 10px;background:var(--bgc);border-radius:10px;padding:3px;gap:3px;border:1px solid var(--bd)">
           <div id="pt-ind" onclick="switchPersonalTab(&#39;ind&#39;)" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:var(--bg2);color:var(--t1)">個人明細</div>
           <div id="pt-fam" onclick="switchPersonalTab(&#39;fam&#39;)" style="flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--tm)">家庭匯總</div>
@@ -765,12 +800,15 @@ window.undoVerifyAll=function(){
 };
 
 window.switchAccTab=function(t){
-  const g=document.getElementById('acc-group'),p=document.getElementById('acc-personal');
-  const tg=document.getElementById('acc-tab-g'),tp=document.getElementById('acc-tab-p');
+  const g=document.getElementById('acc-group'),p=document.getElementById('acc-personal'),pub=document.getElementById('acc-pubfund');
+  const tg=document.getElementById('acc-tab-g'),tp=document.getElementById('acc-tab-p'),tpub=document.getElementById('acc-tab-pub');
   const activeStyle='flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:var(--bg2);color:var(--t1)';
   const inactiveStyle='flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--tm)';
-  if(t==='group'){g.style.display='';p.style.display='none';tg.style.cssText=activeStyle;tp.style.cssText=inactiveStyle;}
-  else{g.style.display='none';p.style.display='';tp.style.cssText=activeStyle;tg.style.cssText=inactiveStyle;}
+  [g,p,pub].forEach(el=>{if(el)el.style.display='none';});
+  [tg,tp,tpub].forEach(el=>{if(el)el.style.cssText=inactiveStyle;});
+  if(t==='group'){if(g)g.style.display='';if(tg)tg.style.cssText=activeStyle;}
+  else if(t==='pubfund'){if(pub)pub.style.display='';if(tpub)tpub.style.cssText=activeStyle.replace('color:var(--t1)','color:var(--gold)');renderPubFund();}
+  else{if(p)p.style.display='';if(tp)tp.style.cssText=activeStyle;}
 };
 
 window.openAccModal=function(){accSelSplit='all13';accSelPeople=[...ALL_MEMBERS];accSelCur='THB';accSelCat='food';accSelPayer='球';accMode='group';renderAccModal();openModal();};
@@ -1033,6 +1071,128 @@ window.switchAccTab=function(t){
   _origSwitchAccTab(t);
   if(t==='personal'){renderPersonal();}
 };
+// ══ PUBLIC FUND (公費) ══
+let PUB_RECORDS=[];
+
+// Load pub fund from Firebase
+db.ref('app2026/pubfund').on('value',snap=>{
+  const data=snap.val();
+  if(data&&Array.isArray(data))PUB_RECORDS=data;
+  else PUB_RECORDS=[];
+  renderPubFund();
+});
+
+function savePubToFB(){
+  setSyncStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    db.ref('app2026/pubfund').set(PUB_RECORDS).then(()=>setSyncStatus('online'));
+  },800);
+}
+
+function renderPubFund(){
+  const income=PUB_RECORDS.filter(r=>r.type==='income').reduce((a,r)=>a+(r.currency==='THB'?r.amount:Math.round(r.amount/THB_RATE)),0);
+  const expense=PUB_RECORDS.filter(r=>r.type==='expense').reduce((a,r)=>a+(r.currency==='THB'?r.amount:Math.round(r.amount/THB_RATE)),0);
+  const balance=income-expense;
+  const elI=document.getElementById('pub-income');if(elI)elI.textContent='฿ '+income.toLocaleString();
+  const elE=document.getElementById('pub-expense');if(elE)elE.textContent='฿ '+expense.toLocaleString();
+  const elB=document.getElementById('pub-balance');
+  if(elB){elB.textContent='฿ '+balance.toLocaleString();elB.style.color=balance>=0?'var(--grn)':'var(--red)';}
+  const elBN=document.getElementById('pub-balance-ntd');
+  if(elBN)elBN.textContent='NT$ '+Math.round(balance*THB_RATE).toLocaleString()+' 換算台幣';
+  const el=document.getElementById('pubList');if(!el)return;
+  if(!PUB_RECORDS.length){el.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--tm);font-size:13px"><div style="font-size:36px;margin-bottom:10px">💰</div>還沒有公費記錄<br>點上方「＋ 收入」或「－ 支出」新增</div>';return;}
+  el.innerHTML=[...PUB_RECORDS].reverse().map(r=>{
+    const isInc=r.type==='income';
+    const sym=r.currency==='THB'?'฿':'NT$';
+    const amtTHB=r.currency==='THB'?r.amount:Math.round(r.amount/THB_RATE);
+    return `<div class="exp-card" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;flex-wrap:wrap">
+            <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:${isInc?'rgba(76,175,130,.15)':'rgba(224,82,82,.12)'};color:${isInc?'var(--grn)':'var(--red)'}">${isInc?'▲ 收入':'▼ 支出'}</span>
+            ${r.date?`<span style="font-size:10px;color:var(--tm)">${r.date}</span>`:''}
+          </div>
+          <div style="font-size:15px;font-weight:600;color:var(--t1)">${esc(r.title)}</div>
+          ${r.note?`<div style="font-size:12px;color:var(--t2);margin-top:3px">${esc(r.note)}</div>`:''}
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:500;color:${isInc?'var(--grn)':'var(--red)'}">${isInc?'+':'-'}${sym} ${r.amount.toLocaleString()}</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px">${r.currency==='THB'?'NT$ '+Math.round(r.amount*THB_RATE).toLocaleString():'฿ '+amtTHB.toLocaleString()}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)">
+        <div onclick="deletePubRecord('${r.id}')" style="padding:6px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--bgi);font-size:12px;color:var(--red);cursor:pointer">✕ 刪除</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.openPubModal=function(type){
+  const isInc=type==='income';
+  const DATES=['5/16','5/17','5/18','5/19','5/20','5/21','5/22','5/23','5/24'];
+  let pubCur='THB';
+  document.getElementById('modalBody').innerHTML=`
+    <div style="font-size:17px;font-weight:700;color:var(--t1);margin-bottom:4px">${isInc?'＋ 新增收入':'－ 新增支出'}</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:16px">${isInc?'記錄大家繳交的公費收入':'記錄從公費支出的項目'}</div>
+    <div class="form-group"><label class="form-label">說明</label><input class="form-input" id="pubTitle" placeholder="${isInc?'例：球繳公費 2000 泰銖':'例：包車費用'}"/></div>
+    <div class="form-group"><label class="form-label">金額</label><div style="display:flex;gap:8px">
+      <div class="cur-toggle">
+        <button class="cur-btn active" id="pub-btn-thb" onclick="setPubCur('THB')">฿ 泰銖</button>
+        <button class="cur-btn" id="pub-btn-twd" onclick="setPubCur('TWD')">NT$ 台幣</button>
+      </div>
+      <input class="form-input" type="number" id="pubAmount" placeholder="0" inputmode="decimal" style="flex:1;font-family:'DM Mono',monospace;font-size:18px" oninput="updatePubHint()"/>
+    </div>
+    <div id="pubFxHint" style="font-size:11px;color:var(--grn);margin-top:5px"></div></div>
+    <div class="form-group"><label class="form-label">備註（選填）</label><input class="form-input" id="pubNote" placeholder="例：球一家繳"/></div>
+    <div class="form-group"><label class="form-label">日期</label><div style="display:flex;flex-wrap:wrap;gap:6px">
+      ${DATES.map(d=>`<div id="pubdchip-${d}" onclick="setPubDate('${d}')" style="padding:7px 14px;border-radius:20px;border:1px solid var(--bd);background:var(--bgi);font-size:13px;color:var(--t2);cursor:pointer">${d}</div>`).join('')}
+    </div><input type="hidden" id="pubDate" value=""/></div>
+    <div class="btn-row"><button class="btn-cancel" onclick="closeModal()">取消</button><button class="btn-save${isInc?' green':''}" style="${!isInc?'background:var(--red)':''}" onclick="savePubRecord('${type}')">確認新增</button></div>`;
+  openModal();
+};
+
+let _pubCur='THB';
+window.setPubCur=function(c){
+  _pubCur=c;
+  const bT=document.getElementById('pub-btn-thb'),bW=document.getElementById('pub-btn-twd');
+  if(bT)bT.className='cur-btn'+(c==='THB'?' active':'');
+  if(bW)bW.className='cur-btn'+(c==='TWD'?' active':'');
+  updatePubHint();
+};
+window.updatePubHint=function(){
+  const v=parseFloat(document.getElementById('pubAmount')?.value)||0;
+  const hint=document.getElementById('pubFxHint');
+  if(hint&&v)hint.textContent=_pubCur==='THB'?`≈ NT$ ${Math.round(v*THB_RATE).toLocaleString()}`:`≈ ฿ ${Math.round(v/THB_RATE).toLocaleString()}`;
+  else if(hint)hint.textContent='';
+};
+window.setPubDate=function(d){
+  const cur=document.getElementById('pubDate');
+  document.querySelectorAll('[id^="pubdchip-"]').forEach(el=>{el.style.cssText='padding:7px 14px;border-radius:20px;border:1px solid var(--bd);background:var(--bgi);font-size:13px;color:var(--t2);cursor:pointer';});
+  if(cur&&cur.value===d){cur.value='';}else{
+    const chip=document.getElementById('pubdchip-'+d);
+    if(chip){chip.style.borderColor='var(--gold)';chip.style.background='rgba(245,200,66,.12)';chip.style.color='var(--gold)';chip.style.fontWeight='600';}
+    if(cur)cur.value=d;
+  }
+};
+window.savePubRecord=function(type){
+  const title=document.getElementById('pubTitle')?.value.trim();
+  const amount=parseFloat(document.getElementById('pubAmount')?.value);
+  const note=document.getElementById('pubNote')?.value.trim()||'';
+  const date=document.getElementById('pubDate')?.value||'';
+  if(!title||!amount){alert('請填寫說明和金額');return;}
+  PUB_RECORDS.push({id:'p'+Date.now(),type,title,amount,currency:_pubCur,note,date});
+  savePubToFB();
+  closeModal();
+  renderPubFund();
+};
+window.deletePubRecord=function(id){
+  if(!confirm('確定刪除此記錄？'))return;
+  PUB_RECORDS=PUB_RECORDS.filter(r=>r.id!==id);
+  savePubToFB();
+  renderPubFund();
+};
+
 }); // end DOMContentLoaded
 </script>
 
