@@ -122,7 +122,7 @@ html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif
 .atab.active{background:var(--bg2);color:var(--t1)}
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
 .modal-ov.open{display:flex}
-.modal-sh{width:100%;max-width:480px;background:var(--bg2);border-radius:24px 24px 0 0;padding:24px 20px calc(44px + env(safe-area-inset-bottom));border:1px solid var(--bdl);max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.modal-sh{width:100%;max-width:480px;background:var(--bg2);border-radius:24px 24px 0 0;padding:24px 20px 0;border:1px solid var(--bdl);max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
 .modal-ov.open .modal-sh{transform:translateY(0)}
 .modal-handle{width:36px;height:4px;background:var(--bdl);border-radius:2px;margin:0 auto 20px}
 .form-group{margin-bottom:14px}
@@ -132,7 +132,7 @@ html,body{background:#0d0f14;color:#e8ecf5;font-family:'Noto Sans TC',sans-serif
 .form-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238891a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
 .form-select option{background:var(--bgc)}
 .form-textarea{min-height:80px;resize:vertical;line-height:1.6}
-.btn-row{display:flex;gap:10px;margin-top:20px;position:sticky;bottom:calc(env(safe-area-inset-bottom));background:var(--bg2);padding:12px 0 16px;z-index:5}
+.btn-row{display:flex;gap:10px;margin-top:20px;position:sticky;bottom:0;background:var(--bg2);padding:12px 0 calc(20px + env(safe-area-inset-bottom));z-index:5}
 .btn-cancel{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:var(--rs);color:var(--t2);font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:600;padding:14px;cursor:pointer}
 .btn-save{flex:2;background:var(--acc);border:none;border-radius:var(--rs);color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:700;padding:14px;cursor:pointer}
 .btn-save.green{background:var(--grn)}
