@@ -415,7 +415,7 @@ const db = firebase.database();
 const syncDot = document.getElementById('syncDot');
 function setSyncStatus(s){syncDot.className='sync-dot '+s;syncDot.textContent=s==='online'?'● 已同步':s==='saving'?'↑ 儲存中':'⏳ 連線中';}
 let saveTimer=null;
-function saveToFB(){setSyncStatus('saving');clearTimeout(saveTimer);saveTimer=setTimeout(()=>{db.ref('app2026').set({itinerary:DAYS,expenses:EXPENSES,checklist:CL_STATE,customCats:CL_CUSTOM_CATS}).then(()=>setSyncStatus('online'));},800);}
+function saveToFB(){setSyncStatus('saving');clearTimeout(saveTimer);saveTimer=setTimeout(()=>{db.ref('app2026').set({itinerary:DAYS,expenses:EXPENSES,checklist:CL_STATE,customCats:CL_CUSTOM_CATS,fxRates:FX}).then(()=>setSyncStatus('online'));},800);}
 
 const TYPE_ICON={航班:'✈️',集合:'📣',交通:'🚌',飯店:'🏨',住宿:'🛏️',景點:'🗺️',用餐:'🍜',其他:'📌',購物:'🛍️',活動:'🎡'};
 const DAY_HINTS=[
@@ -527,6 +527,7 @@ db.ref('app2026').on('value',snap=>{
     if(data.expenses&&Array.isArray(data.expenses))EXPENSES=data.expenses;
     if(data.checklist){FAMS_CL.forEach(f=>{if(data.checklist[f.id]){CATS_CL.forEach(c=>{if(data.checklist[f.id][c.id])CL_STATE[f.id][c.id]=data.checklist[f.id][c.id];});if(data.customCats&&data.customCats[f.id]){(data.customCats[f.id]||[]).forEach(c=>{if(data.checklist[f.id][c.id])CL_STATE[f.id][c.id]=data.checklist[f.id][c.id];});}}});}
     if(data.customCats){CL_CUSTOM_CATS=data.customCats;}
+    if(data.fxRates){FX=data.fxRates;applyFX();}
   }else{saveToFB();}
   setSyncStatus('online');
   renderAll();
@@ -557,7 +558,7 @@ function tick(){
 }
 setInterval(tick,1000);tick();
 
-window.updateFX=function(){const thb=parseFloat(document.getElementById('thb-inp').value)||0;document.getElementById('twd-v').textContent='NT$ '+Math.round(thb*FX.twd).toLocaleString();document.getElementById('usd-v').textContent='$ '+(thb*FX.usd).toFixed(2);document.getElementById('jpy-v').textContent='¥ '+Math.round(thb*FX.jpy).toLocaleString();document.getElementById('krw-v').textContent='₩ '+Math.round(thb*FX.krw).toLocaleString();};
+window.updateFX=function(){applyFX();};
 
 function renderAll(){renderItinerary();renderAccounting();renderCL();}
 
@@ -919,6 +920,7 @@ window.toggleInfo=function(id){const body=document.getElementById('body-'+id),ch
 window.switchArea=function(area){document.getElementById('area-bkk').style.display=area==='bkk'?'':'none';document.getElementById('area-samet').style.display=area==='samet'?'':'none';document.getElementById('atab-bkk').className='atab'+(area==='bkk'?' active':'');document.getElementById('atab-samet').className='atab'+(area==='samet'?' active':'');};
 // Custom FX rate modal
 let FX={twd:0.895,usd:0.0278,jpy:4.19,krw:37.2};
+function applyFX(){const thb=parseFloat(document.getElementById("thb-inp").value)||1000;document.getElementById("twd-v").textContent="NT$ "+Math.round(thb*FX.twd).toLocaleString();document.getElementById("usd-v").textContent="$ "+(thb*FX.usd).toFixed(2);document.getElementById("jpy-v").textContent="00a5 "+Math.round(thb*FX.jpy).toLocaleString();document.getElementById("krw-v").textContent="20a9 "+Math.round(thb*FX.krw).toLocaleString();document.getElementById("twd-sub").textContent="1 0e3f = "+FX.twd+" NT$";document.getElementById("usd-sub").textContent="1 0e3f = "+FX.usd+" $";document.getElementById("jpy-sub").textContent="1 0e3f = "+FX.jpy+" 00a5";document.getElementById("krw-sub").textContent="1 0e3f = "+FX.krw+" 20a9";}
 window.openFxModal=function(){
   document.getElementById('modalBody').innerHTML=`
     <div style="font-size:17px;font-weight:700;color:var(--t1);margin-bottom:6px">自訂換匯匯率</div>
@@ -943,16 +945,8 @@ window.saveFxRates=function(){
   if(!isNaN(usd))FX.usd=usd;
   if(!isNaN(jpy))FX.jpy=jpy;
   if(!isNaN(krw))FX.krw=krw;
-  // Update fx display
-  document.getElementById('twd-v').textContent='NT$ '+Math.round((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.twd).toLocaleString();
-  document.getElementById('usd-v').textContent='$ '+((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.usd).toFixed(2);
-  document.getElementById('jpy-v').textContent='¥ '+Math.round((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.jpy).toLocaleString();
-  document.getElementById('krw-v').textContent='₩ '+Math.round((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.krw).toLocaleString();
-  // Update green subtitle labels
-  document.getElementById('twd-sub').textContent='1 ฿ = '+FX.twd+' NT$';
-  document.getElementById('usd-sub').textContent='1 ฿ = '+FX.usd+' $';
-  document.getElementById('jpy-sub').textContent='1 ฿ = '+FX.jpy+' ¥';
-  document.getElementById('krw-sub').textContent='1 ฿ = '+FX.krw+' ₩';
+  applyFX();
+  saveToFB();
   closeModal();
 };
 window.openModal=function(){document.getElementById('modalOv').classList.add('open');};
