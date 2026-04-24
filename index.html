@@ -415,7 +415,7 @@ const db = firebase.database();
 const syncDot = document.getElementById('syncDot');
 function setSyncStatus(s){syncDot.className='sync-dot '+s;syncDot.textContent=s==='online'?'● 已同步':s==='saving'?'↑ 儲存中':'⏳ 連線中';}
 let saveTimer=null;
-function saveToFB(){setSyncStatus('saving');clearTimeout(saveTimer);saveTimer=setTimeout(()=>{db.ref('app2026').set({itinerary:DAYS,expenses:EXPENSES,checklist:CL_STATE,customCats:CL_CUSTOM_CATS}).then(()=>setSyncStatus('online'));},800);}
+function saveToFB(){setSyncStatus('saving');clearTimeout(saveTimer);saveTimer=setTimeout(()=>{db.ref('app2026').update({itinerary:DAYS,expenses:EXPENSES,checklist:CL_STATE,customCats:CL_CUSTOM_CATS}).then(()=>setSyncStatus('online'));},800);}
 
 const TYPE_ICON={航班:'✈️',集合:'📣',交通:'🚌',飯店:'🏨',住宿:'🛏️',景點:'🗺️',用餐:'🍜',其他:'📌',購物:'🛍️',活動:'🎡'};
 const DAY_HINTS=[
@@ -527,12 +527,12 @@ db.ref('app2026').on('value',snap=>{
     if(data.expenses&&Array.isArray(data.expenses))EXPENSES=data.expenses;
     if(data.checklist){FAMS_CL.forEach(f=>{if(data.checklist[f.id]){CATS_CL.forEach(c=>{if(data.checklist[f.id][c.id])CL_STATE[f.id][c.id]=data.checklist[f.id][c.id];});if(data.customCats&&data.customCats[f.id]){(data.customCats[f.id]||[]).forEach(c=>{if(data.checklist[f.id][c.id])CL_STATE[f.id][c.id]=data.checklist[f.id][c.id];});}}});}
     if(data.customCats){CL_CUSTOM_CATS=data.customCats;}
+    if(data.fxRates&&data.fxRates.twd){FX=data.fxRates;}
   }else{saveToFB();}
   setSyncStatus('online');
   renderAll();
+  applyFX();
 });
-
-db.ref('app2026/fxRates').on('value',snap=>{const d=snap.val();if(d&&d.twd){FX=d;applyFX();}});
 
 window.switchPage=function(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
@@ -947,8 +947,8 @@ window.saveFxRates=function(){
   if(!isNaN(jpy))FX.jpy=jpy;
   if(!isNaN(krw))FX.krw=krw;
   applyFX();
-  db.ref('app2026/fxRates').set(FX).then(()=>setSyncStatus('online'));
   setSyncStatus('saving');
+  db.ref('app2026').update({fxRates:FX}).then(()=>setSyncStatus('online'));
   closeModal();
 };
 window.openModal=function(){document.getElementById('modalOv').classList.add('open');};
