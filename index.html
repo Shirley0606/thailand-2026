@@ -212,10 +212,10 @@ html, body { overscroll-behavior: none; }
           <div style="display:flex;align-items:center;gap:10px;padding:0 16px 12px"><div style="flex:1;background:var(--bgi);border-radius:10px;border:1px solid var(--bd);display:flex;align-items:center;padding:8px 12px;gap:6px"><span style="font-size:14px;color:var(--tm)">฿</span><input class="fx-inp" type="number" value="1000" id="thb-inp" inputmode="decimal" oninput="updateFX()"></div><span style="font-size:13px;color:var(--t2)">泰銖</span></div>
           <div style="height:1px;background:var(--bd);margin:0 16px"></div>
           <div style="padding:10px 16px 14px;display:flex;flex-direction:column;gap:8px">
-            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">🇹🇼 台幣 TWD</span><div style="text-align:right"><div id="twd-v" style="font-family:&#39;DM Mono&#39;,monospace;font-size:17px;font-weight:500;color:var(--t1)">NT$ 895</div><div style="font-size:10px;color:var(--grn)">1 ฿ = 0.895 NT$</div></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">🇺🇸 美金 USD</span><div style="text-align:right"><div id="usd-v" style="font-family:&#39;DM Mono&#39;,monospace;font-size:17px;font-weight:500;color:var(--t1)">$ 27.80</div><div style="font-size:10px;color:var(--grn)">1 ฿ = 0.0278 $</div></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">🇯🇵 日圓 JPY</span><div style="text-align:right"><div id="jpy-v" style="font-family:&#39;DM Mono&#39;,monospace;font-size:17px;font-weight:500;color:var(--t1)">¥ 4,190</div><div style="font-size:10px;color:var(--grn)">1 ฿ = 4.19 ¥</div></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">🇰🇷 韓圜 KRW</span><div style="text-align:right"><div id="krw-v" style="font-family:&#39;DM Mono&#39;,monospace;font-size:17px;font-weight:500;color:var(--t1)">₩ 37,200</div><div style="font-size:10px;color:var(--grn)">1 ฿ = 37.2 ₩</div></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">🇹🇼 台幣 TWD</span><div style="text-align:right"><div id="twd-v" style="font-family:&#39;DM Mono&#39;,monospace;font-size:17px;font-weight:500;color:var(--t1)">NT$ 895</div><div id="twd-sub" style="font-size:10px;color:var(--grn)">1 ฿ = 0.895 NT$</div></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">🇺🇸 美金 USD</span><div style="text-align:right"><div id="usd-v" style="font-family:&#39;DM Mono&#39;,monospace;font-size:17px;font-weight:500;color:var(--t1)">$ 27.80</div><div id="usd-sub" style="font-size:10px;color:var(--grn)">1 ฿ = 0.0278 $</div></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">🇯🇵 日圓 JPY</span><div style="text-align:right"><div id="jpy-v" style="font-family:&#39;DM Mono&#39;,monospace;font-size:17px;font-weight:500;color:var(--t1)">¥ 4,190</div><div id="jpy-sub" style="font-size:10px;color:var(--grn)">1 ฿ = 4.19 ¥</div></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--t2)">🇰🇷 韓圜 KRW</span><div style="text-align:right"><div id="krw-v" style="font-family:&#39;DM Mono&#39;,monospace;font-size:17px;font-weight:500;color:var(--t1)">₩ 37,200</div><div id="krw-sub" style="font-size:10px;color:var(--grn)">1 ฿ = 37.2 ₩</div></div></div>
           </div>
         </div>
         <div style="height:10px"></div>
@@ -948,6 +948,11 @@ window.saveFxRates=function(){
   document.getElementById('usd-v').textContent='$ '+((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.usd).toFixed(2);
   document.getElementById('jpy-v').textContent='¥ '+Math.round((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.jpy).toLocaleString();
   document.getElementById('krw-v').textContent='₩ '+Math.round((parseFloat(document.getElementById('thb-inp').value)||1000)*FX.krw).toLocaleString();
+  // Update green subtitle labels
+  document.getElementById('twd-sub').textContent='1 ฿ = '+FX.twd+' NT$';
+  document.getElementById('usd-sub').textContent='1 ฿ = '+FX.usd+' $';
+  document.getElementById('jpy-sub').textContent='1 ฿ = '+FX.jpy+' ¥';
+  document.getElementById('krw-sub').textContent='1 ฿ = '+FX.krw+' ₩';
   closeModal();
 };
 window.openModal=function(){document.getElementById('modalOv').classList.add('open');};
